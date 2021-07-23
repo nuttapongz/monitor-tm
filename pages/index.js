@@ -128,6 +128,9 @@ export default function Home(props) {
         <meta name="description" content="TLMMINER-Monitor ใช้งานง่าย " />
       </Head>
 
+         <span className="text-5xl font-bold mb-3 text-center"> TLMMINER-MONITOR</span>
+		 <span className="text-center text-2xl mt-2">ใช้สำหรับดูรายละเอียด ID WAX หลาย ID และ รวม ` WAX ` ทั้งหมดเป็น ` บาท ` </span>
+
       {layout != 'Table' && <>
       
         <TotalBalanceCard totalTLM={totalTLM} totalWax={totalWax} totalStaked={totalStaked}
@@ -160,6 +163,7 @@ export default function Home(props) {
           onTotalStakedChange={(newTotal) => { setTotalStaked(newTotal) }}
           />
         </div>
+		  <span className="text-center text-sm mt-2"> Copyright TLMMINER & AlienWolrds.FUN © 2021</span>
       </>}
     </div>
   )
