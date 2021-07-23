@@ -121,7 +121,7 @@ export default function AccountTable(props) {
                     })}
                 </tbody>
             </table>
-            {accounts.length === 0 && <span className="text-3xl font-bold text-center text-red-400">No accounts added yet!</span>}
+            {accounts.length === 0 && <span className="text-3xl font-bold text-center text-red-400">คุณไม่มี WAM ACCOUNT กรุณา ADD xxxx.WAM!</span>}
         </div>
     )
 }
