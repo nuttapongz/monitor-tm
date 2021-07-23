@@ -128,67 +128,6 @@ export default function Home(props) {
         <meta name="description" content="TLMMINER-Monitor ใช้งานง่าย " />
       </Head>
 
-<main className="flex flex-col w-full lg:w-3/6">
-        <div className="flex flex-col">
-          <span className="text-5xl font-bold mb-3 text-center">Alienworlds Account Monitor <span className="text-md text-blue-400">v2.5</span></span>
-          <div className="mx-2 px-2 font-bold text-green-600 bg-green-200 rounded-md text-center w-auto self-center">
-            <span className="text-center text-sm">Like this website? You can donate us by sending WAX to 1crtk.wam</span><br/>
-            <span className="text-center text-xs">This website costs $20/mo to running all services.</span><br/>
-            <span className="text-center text-xs">All donations will use to maintain this website.</span>
-          </div>
-          
-          <span className="text-center text-sm mt-2">This website is open source on <a className="text-blue-400" href="https://github.com/VectorXz/alienworlds_acc_monitor">GitHub</a></span>
-        </div>
-
-        <div className="flex flex-col lg:flex-row w-full items-center justify-center rounded-md shadow-lg p-6 mt-10 mb-2 bg-gray-700 gap-x-4 gap-y-5 lg:gap-y-0">
-          <div className="flex-1 flex-col">
-            <form className="w-full" onSubmit={handleAddAcc}>
-              <div className="flex flex-row items-center justify-center w-full">
-                <label className="text-center lg:mr-4">WAM Account:</label>
-                <input type="text" className="shadow appearance-none w-4/6 rounded py-2 px-3 bg-gray-300 text-gray-800 font-bold leading-tight focus:outline-none focus:shadow-outline"
-                onChange={(e) => { setInput(e.target.value) }} value={input} />
-              </div>
-              <div className="text-xs font-bold mt-0.5 text-red-300 text-center">Adding multiple accounts at once is supported by using space <br /> Ex. abcde.wam efghj.wam 1a2b3.wam</div>
-              <div className="mt-5 w-full">
-                <button className="bg-gray-500 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-                type="submit">
-                  ADD
-                </button>
-              </div>
-            </form>
-            <button className="mt-2 bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-            type="button" onClick={handleDeleteCookies}>
-              DELETE ALL DATAS (COOKIES)
-            </button>
-          </div>
-          <div className="flex-1 flex-col w-full">
-            <div className="flex w-full items-center justify-center">
-              <span className="text-sm font-bold">Like us on Facebook to follow any updates, issues.</span>
-            </div>
-            <div className="flex w-full items-center justify-center mt-0.5">
-              <iframe
-              src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FAlienworldsfun-100734315569585&tabs&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
-              width={340}
-              height={130}
-              style={{border: 'none', overflow: 'hidden'}}
-              scrolling="no"
-              frameBorder={0}
-              allowFullScreen={true}
-              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-              />
-            </div>
-            {account.length > 0 && 
-              <div className="flex-1 flex-row text-center mt-2">
-                <div className="text-center mb-1"><span className="text-xl font-bold mb-1">Save this link to view these accounts later</span></div>
-                <div><input type="text" className="shadow appearance-none w-4/6 rounded w-full py-2 px-3 bg-gray-300 mt-1 text-gray-800 font-bold leading-tight focus:outline-none focus:shadow-outline cursor-pointer"
-                value={link} onClick={(e) => {e.target.select();navigator.clipboard.writeText(link);setCopied(true)}} onFocus={(e) => {e.target.select();}} readOnly /></div>
-                {copied && <div><span className="font-bold text-sm mt-3">Copied to clipboard!</span></div>}
-              </div>
-            }
-          </div>
-        </div>
-      </main>
-
       {layout != 'Table' && <>
       
         <TotalBalanceCard totalTLM={totalTLM} totalWax={totalWax} totalStaked={totalStaked}
