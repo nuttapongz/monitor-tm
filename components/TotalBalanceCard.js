@@ -45,7 +45,7 @@ const TotalBalanceCard = (props) => {
                 <input type="checkbox" className="form-checkbox h-4 w-4 text-gray-600"
                 defaultChecked={options.WAX}
                 onClick={() => setOptions({...options, WAX: !options.WAX})} />
-                <span className="ml-2">WAXP</span>
+                <span className="ml-2">WAX</span>
             </label></th>
                 <th classname="mt-2">           <label className="inline-flex items-center mt-3 mr-3">
                 <input type="checkbox" className=" form-checkbox h-4 w-4 text-gray-600"
