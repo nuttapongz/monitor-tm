@@ -32,6 +32,7 @@ const TotalBalanceCard = (props) => {
     <div className="flex flex-col rounded-md items-center justify-center p-6 my-3 w-full lg:w-5/6 bg-gray-700">
     <div className="flex flex-col w-full text-center">
     <span className="text-4xl font-bold ">รายละเอียด TLM / WAX ทั้งหมด</span>
+	
     <table className="table-auto border border-gray-800 border-collapse mt-5 text-center">
         <thead>
             <tr className="bg-gray-800">
@@ -39,13 +40,13 @@ const TotalBalanceCard = (props) => {
                 <input type="checkbox" className="form-checkbox h-4 w-4 text-gray-600"
                 defaultChecked={options.TLM}
                 onClick={() => setOptions({...options, TLM: !options.TLM})} />
-                <span className="ml-2">TLM</span>
+               <span className="ml-2"> TLM =  {(TLMPrice.market_price*33).toFixed(2)} บาท</span>	
             </label></th>
                 <th classname="mt-2" >            <label className="inline-flex items-center mt-3 ml-1">
                 <input type="checkbox" className="form-checkbox h-4 w-4 text-gray-600"
                 defaultChecked={options.WAX}
                 onClick={() => setOptions({...options, WAX: !options.WAX})} />
-                <span className="ml-2">WAX</span>
+               <span className="ml-2">WAX =  {(WAXPrice.market_price*33).toFixed(2)} บาท</span>
             </label></th>
                 <th classname="mt-2">           <label className="inline-flex items-center mt-3 mr-3">
                 <input type="checkbox" className=" form-checkbox h-4 w-4 text-gray-600"
