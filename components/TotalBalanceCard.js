@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 
 const TotalBalanceCard = (props) => {
-  const { totalTLM, totalWax, totalStaked, TLMPrice, WAXPrice } = props
+  const { totalTLM, totalWax, totalStaked, TotalTLMYTD, TLMPrice, WAXPrice } = props
   
   const [totalUSDT, setTotalUSDT] = useState(0)
   const [options, setOptions] = useState({
     TLM: true,
     WAX: true,
-    Staked: false
+    Staked: false,
+	TLMYTD: false
   })
 
   useEffect(() => {
@@ -21,8 +22,11 @@ const TotalBalanceCard = (props) => {
     if(options.Staked) {
       total += totalStaked*WAXPrice.market_price
     }
+	if(options.TLMYTD) {
+      total += TotalTLMYTD*TLMPrice.market_price
+    }
     setTotalUSDT(total)
-  }, [options, totalTLM, totalWax, totalStaked, TLMPrice, WAXPrice])
+  }, [options, totalTLM, totalWax, totalStaked, TotalTLMYTD, TLMPrice, WAXPrice])
 
   return (
     <div className="flex flex-col rounded-md items-center justify-center p-6 my-3 w-full lg:w-5/6 bg-gray-700">
@@ -49,6 +53,10 @@ const TotalBalanceCard = (props) => {
                 onClick={() => setOptions({...options, Staked: !options.Staked})} />
                 <span className="ml-2">Staked</span>
             </label></th>
+			    <th classname="mt-2"> 
+				<label className="inline-flex items-center mt-3 mr-3">
+                <span className="ml-2">Yesterday</span>
+            </label></th>
             <th classname="mt-2"> รวมยอดทั้งหมด </th>
             </tr>
         </thead>
@@ -57,12 +65,14 @@ const TotalBalanceCard = (props) => {
         <td><span className="text-lg mt-1  ">{totalTLM.toFixed(2)} TLM</span></td>
         <td><span className="text-lg mt-1  ">{totalWax.toFixed(2)} WAX</span></td>
         <td><span className="text-lg mt-1  ">{totalStaked.toFixed(2)} WAX</span></td>
+		<td><span className="text-lg mt-1  ">{TotalTLMYTD.toFixed(2)} TLM</span></td>
         <td><span className="text-lg mt-1  ">{totalUSDT.toFixed(2)} USDT</span></td>
         </tbody>
         <tbody className="bg-gray-700">
         <td><span className="text-xl  ">฿ ราคา {(totalTLM*TLMPrice.market_price).toFixed(0)*33} บาท</span></td>
         <td><span className="text-xl  ">฿ ราคา {(totalWax*WAXPrice.market_price).toFixed(0)*33} บาท</span></td>
         <td><span className="text-xl  ">฿ ราคา {(totalStaked*WAXPrice.market_price).toFixed(0)*33} บาท</span></td>
+        <td><span className="text-xl  ">฿ ราคา {(TotalTLMYTD*TLMPrice.market_price).toFixed(0)*33} บาท</span></td>
         <td><span className="text-xl  ">฿ ราคา {totalUSDT.toFixed(0)*33} บาท</span></td>
           </tbody>
 

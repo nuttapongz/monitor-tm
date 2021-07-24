@@ -18,6 +18,9 @@ const v1 = [
     'https://wax.eosphere.io',
     'https://api.waxeastern.cn'
 ]
+const v2 = [
+    
+];
 
 const tx_api = [
     'https://wax.greymass.com',
@@ -29,18 +32,21 @@ const tx_api = [
 
 const tx_api_v2 = [
     'https://api.wax.alohaeos.com',
-    'https://wax.eu.eosamsterdam.net',
+    'https://wax.cryptolions.io',
+    'https://wax.blokcrafters.io',
     'https://api.waxsweden.org',
-    'https://wax.cryptolions.io'
+    'https://wax.eosphere.io',
+    'https://wax.eu.eosamsterdam.net'
 ]
 
 export default function AccountRow(props) {
-    const { index, account, axios, onDelete, onTLMChange, onWaxChange, onStakedChange } = props
+    const { index, account, axios, onDelete, onTLMChange, onWaxChange, onStakedChange, onTLMYTDChange } = props
 
     const [acc, setAcc] = useState(account)
     const [loading, setLoading] = useState(true)
     const [accInfo, setAccInfo] = useState({})
     const [balance, setBalance] = useState("Loading")
+    const [TLMYTD, setTLMYTD] = useState("Loading")
     const [wax, setWax] = useState("Loading")
     const isInitialTx = useRef(true)
     const [update, setUpdate] = useState("None")
@@ -149,7 +155,9 @@ export default function AccountRow(props) {
             console.log(result)
             const newCpuState = {
                 ...result.cpu_limit,
-                cpu_weight: result.total_resources.cpu_weight
+                cpu_weight: result.total_resources.cpu_weight,
+                St:parseFloat(result.total_resources.cpu_weight.replace('WAX','').replace(' ','')).toFixed(4)
+                
             }
             setAccInfo(newCpuState)
             console.log(result.core_liquid_balance)
@@ -395,6 +403,37 @@ export default function AccountRow(props) {
             setNft([...result.rows[0].template_ids])
         }
     }
+    const TLM_yesterday = async (user) => {
+        let api_index = getRandom(0, tx_api_v2.length)
+        let tries = 0
+        let result = null
+        var yes = new Date((new Date()).valueOf() - 1000*60*60*48);
+        var to = new Date((new Date()).valueOf() - 1000*60*60*24);
+        let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.getUTCDate()}T17:00:00.000Z`
+        let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T16:59:59.999Z`
+        while(tries < 3) {
+            console.log("TRY ",tries)
+            await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=1000&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
+            .then((resp) => {
+                if(resp && resp.data) {
+                    result = resp.data
+                    let amount_yesterday = 0
+                    for (let i = 0; i < result.actions.length; i++) {
+                        amount_yesterday += result.actions[i].act.data.amount;
+                    }
+                    console.log(amount_yesterday.toFixed(4))
+                    setTLMYTD(amount_yesterday.toFixed(4))
+                }
+            })
+            .catch((err) => {
+                tries++
+                api_index++
+            })
+            if(result != null) {
+                break;
+            }
+        }
+    }
 
     useEffect(async () => {
         await getMinerName(acc)
@@ -409,9 +448,11 @@ export default function AccountRow(props) {
             //console.log("Checking... "+acc)
             await fetchAccountData(acc)
             await fetchTLM(acc)
+			await TLM_yesterday(acc)
             await delay(getRandom(100,1500))
             await getLastMineInfo(acc)
             await checkNFT(acc)
+            
             setLoading(false)
         } else {
             //console.log("Not check!")
@@ -425,12 +466,20 @@ export default function AccountRow(props) {
     useEffect(() => {
         onWaxChange(wax)
     }, [wax])
+	
+		useEffect(() => {
+        onTLMYTDChange(TLMYTD)
+    }, [TLMYTD])
+	
+	
 
     useEffect(() => {
         if(accInfo.cpu_weight) {
             onStakedChange(accInfo.cpu_weight.slice(0, -8))
         }
     }, [accInfo.cpu_weight])
+
+	
 
     useEffect(() => {
         const interval = setInterval(async () => {
@@ -472,7 +521,7 @@ export default function AccountRow(props) {
                         </div>
                     </div>
                 </td>
-                <td>{accInfo.cpu_weight}</td>
+                <td>{accInfo.St} WAX</td>
                 <td>{balance} TLM</td>
                 <td>{wax} WAX</td>
                 <td>                               
@@ -484,6 +533,7 @@ export default function AccountRow(props) {
                 </span> : ''}
                 {nft && nft.length > 0 && <span className="font-bold text-xs">{nft.length} NFTs Claimable!</span>} <br />
                 </td>
+                <td>{TLMYTD} TLM</td>
                 <td className="p-3">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 cursor-pointer mx-auto" viewBox="0 0 20 20" fill="#FF0000"
                     onClick={() => { onDelete(acc) }}>
