@@ -56,7 +56,7 @@ const TotalBalanceCard = (props) => {
             </label></th>
 			    <th classname="mt-2"> 
 				<label className="inline-flex items-center mt-3 mr-3">
-                <span className="ml-2">รวมเมื่อวาน</span>
+                <span className="ml-2">รวมยอดขุดเมื่อวานทั้งหมด</span>
             </label></th>
             <th classname="mt-2"> รวมยอดทั้งหมด </th>
             </tr>
