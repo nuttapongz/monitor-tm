@@ -128,8 +128,8 @@ export default function Home(props) {
         <title>TLMMINER-Monitor ใช้งานง่าย!</title>
         <meta name="description" content="TLMMINER-Monitor ใช้งานง่าย " />
       </Head>
-
-         <span className="text-5xl font-bold mb-3 text-center"> TLMMINER-MONITOR</span>
+	
+         <span className="text-5xl font-bold mb-3 text-center"><img src="https://tlmminer.com/image/coin2.gif" alt="me" width="64" height="64" /> TLMMINER-MONITOR</span>
 		 <span className="text-center text-2xl mt-2">ใช้สำหรับดูรายละเอียด ID WAX ทั้งหมด รวม WAX & TLM เป็น บาท  </span>
 	  	 <span className="text-center text-1xl mt-2">เช็ค TLM / WAX / Stake / เช็คขุดล่าสุด / เช็ค NFT Drop / เช็คขุดเมื่อวาน </span>
 		<span className="text-center text-1xl mt-2">สามารถเปิดค้างระหว่าง BOT ได้เลย ระบบจะดึงข้อมลูแค่ Loading และจะดึงข้อมลูใหม่ทุก 2 ชม. </span>
