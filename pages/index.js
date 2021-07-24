@@ -130,7 +130,8 @@ export default function Home(props) {
       </Head>
 
          <span className="text-5xl font-bold mb-3 text-center"> TLMMINER-MONITOR</span>
-		 <span className="text-center text-2xl mt-2">ใช้สำหรับดูรายละเอียด ID WAX หลาย ID และ รวม ` WAX ` ทั้งหมดเป็น ` บาท ` </span>
+		 <span className="text-center text-2xl mt-2">ใช้สำหรับดูรายละเอียด ID WAX หลาย ID </span>
+	  	 <span className="text-center text-1xl mt-2">เช็ค TLM / WAX / Stake / เช็คขุดล่าสุด / เช็ค NFT Drop / เช็คขุดเมื่อวาน </span>
 
       {layout != 'Table' && <>
       
