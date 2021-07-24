@@ -19,7 +19,10 @@ const v1 = [
     'https://api.waxeastern.cn'
 ]
 const v2 = [
-    
+     'https://wax.cryptolions.io',
+    'https://wax.blokcrafters.io',
+    'https://api.waxsweden.org',
+    'https://wax.eosphere.io'   
 ];
 
 const tx_api = [
@@ -305,10 +308,10 @@ export default function AccountRow(props) {
         if(!result) {
             // Try v2
             tries = 0
-            api_index = getRandom(0, tx_api_v2.length)
+            api_index = getRandom(0, v2.length)
             while(tries < 3) {
                 console.log("TRY ",tries)
-                await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_transaction?id=${tx}`)
+                await axios.get(`${v2[api_index%v2.length]}/v2/history/get_transaction?id=${tx}`)
                 .then((resp) => {
                     if(resp && resp.data) {
                         result = { mined: resp.data.actions[1].act.data.amount }
@@ -413,7 +416,7 @@ export default function AccountRow(props) {
         let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T16:59:59.999Z`
         while(tries < 3) {
             console.log("TRY ",tries)
-            await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=1000&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
+            await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=300&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
             .then((resp) => {
                 if(resp && resp.data) {
                     result = resp.data
