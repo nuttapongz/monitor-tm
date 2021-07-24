@@ -39,13 +39,13 @@ const TotalBalanceCard = (props) => {
                 <input type="checkbox" className="form-checkbox h-4 w-4 text-gray-600"
                 defaultChecked={options.TLM}
                 onClick={() => setOptions({...options, TLM: !options.TLM})} />
-                <span className="ml-2">TLM =  {TLMPrice.market_price*33} บาท</span></span>
+                <span className="ml-2">TLM</span></span>
             </label></th>
                 <th classname="mt-2" >            <label className="inline-flex items-center mt-3 ml-1">
                 <input type="checkbox" className="form-checkbox h-4 w-4 text-gray-600"
                 defaultChecked={options.WAX}
                 onClick={() => setOptions({...options, WAX: !options.WAX})} />
-                <span className="ml-2">WAXP =  {WAXPrice.market_price*33} บาท</span>
+                <span className="ml-2">WAXP</span>
             </label></th>
                 <th classname="mt-2">           <label className="inline-flex items-center mt-3 mr-3">
                 <input type="checkbox" className=" form-checkbox h-4 w-4 text-gray-600"
