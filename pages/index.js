@@ -165,7 +165,7 @@ export default function Home(props) {
 		  onTotalTLMYTDChange={(newTotal) => { setTotalTLMYTD(newTotal) }}
           />
         </div>
-<span className="text-2xl font-bold text-center text-red-400 mt-4">** คำเตือน ** ห้ามเปิดทิ้งไว้ระหว่างบอท อาจทำให้ API โดน BAN IP ได้  !!</span>
+<span className="text-2xl font-bold text-center text-red-400 mt-4">*** เปิดร่วมระหว่างบอทได้ ระบบจะดึงข้อมลูเฉพาะ Loading เท่านั้น !! ( ดึงข้อมลูใหม่ทุก 2 ชม. ) ***</span>
 		  <span className="text-center text-sm mt-2"> Copyright TLMMINER & AlienWolrds.FUN © 2021</span>
       </>}
     </div>
