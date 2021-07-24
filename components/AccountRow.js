@@ -412,8 +412,8 @@ export default function AccountRow(props) {
         let result = null
         var yes = new Date((new Date()).valueOf() - 1000*60*60*48);
         var to = new Date((new Date()).valueOf() - 1000*60*60*24);
-        let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.getUTCDate()}T00:00:00.000Z`
-        let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T23:59:59.999Z`
+        let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.getUTCDate()}T17:00:00.000Z`
+        let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T17:00:00.000Z`
         while(tries < 3) {
             console.log("TRY ",tries)
             await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=400&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
