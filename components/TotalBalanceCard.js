@@ -56,9 +56,12 @@ const TotalBalanceCard = (props) => {
             </label></th>
 			    <th classname="mt-2"> 
 				<label className="inline-flex items-center mt-3 mr-3">
-                <span className="ml-2">รวมยอดขุดเมื่อวานทั้งหมด</span>
+                <span className="ml-2">ขุดเมื่อวานทั้งหมด</span>
+		<span className="text-sm">(รายได้ต่อวัน)</span>
             </label></th>
-            <th classname="mt-2"> รวมยอดทั้งหมด </th>
+            <th classname="mt-2">     
+		<span className="ml-2">ยอดรวมทั้งหมด</span>
+		<span className="text-sm">(รายได้ทั้งหมด)</span> </th>
             </tr>
         </thead>
 
@@ -70,11 +73,11 @@ const TotalBalanceCard = (props) => {
         <td><span className="text-lg mt-1  ">{totalUSDT.toFixed(2)} USDT</span></td>
         </tbody>
         <tbody className="bg-gray-700">
-        <td><span className="text-xl  ">฿ ราคา {(totalTLM*TLMPrice.market_price).toFixed(0)*33} บาท</span></td>
-        <td><span className="text-xl  ">฿ ราคา {(totalWax*WAXPrice.market_price).toFixed(0)*33} บาท</span></td>
-        <td><span className="text-xl  ">฿ ราคา {(totalStaked*WAXPrice.market_price).toFixed(0)*33} บาท</span></td>
-        <td><span className="text-xl  ">฿ ราคา {(TotalTLMYTD*TLMPrice.market_price).toFixed(0)*33} บาท</span></td>
-        <td><span className="text-xl  ">฿ ราคา {totalUSDT.toFixed(0)*33} บาท</span></td>
+        <td><span className="text-xl  ">฿  {(totalTLM*TLMPrice.market_price).toFixed(0)*33} บาท</span></td>
+        <td><span className="text-xl  ">฿  {(totalWax*WAXPrice.market_price).toFixed(0)*33} บาท</span></td>
+        <td><span className="text-xl  ">฿  {(totalStaked*WAXPrice.market_price).toFixed(0)*33} บาท</span></td>
+        <td><span className="text-xl  ">฿  {(TotalTLMYTD*TLMPrice.market_price).toFixed(0)*33} บาท</span></td>
+        <td><span className="text-xl  ">฿  {totalUSDT.toFixed(0)*33} บาท</span></td>
           </tbody>
 
     </table>
