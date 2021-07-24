@@ -445,7 +445,7 @@ export default function AccountRow(props) {
 
     useEffect(async () => {
         //console.log("Loading... "+loading)
-        await delay(getRandom(100, 5000))
+        await delay(getRandom(1000, 50000))
         setUpdate(DateTime.now().setZone("local").toRFC2822())
         if(loading) {
             //console.log("Checking... "+acc)
