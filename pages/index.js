@@ -29,6 +29,7 @@ export default function Home(props) {
   const [totalTLM, setTotalTLM] = useState(0)
   const [totalWax, setTotalWax] = useState(0)
   const [totalStaked, setTotalStaked] = useState(0)
+  const [TotalTLMYTD, setTotalTLMYTD] = useState(0)
   const [TLMPrice, setTLMPrice] = useState({
     market_price: 0,
     update: "None"
@@ -119,7 +120,7 @@ export default function Home(props) {
       }
       setWAXPrice(newWaxPrice)
     }
-  }, [totalTLM, totalWax, totalStaked])
+  }, [totalTLM, totalWax, totalStaked, TotalTLMYTD])
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center mt-10 px-2 lg:px-0">
@@ -133,7 +134,7 @@ export default function Home(props) {
 
       {layout != 'Table' && <>
       
-        <TotalBalanceCard totalTLM={totalTLM} totalWax={totalWax} totalStaked={totalStaked}
+        <TotalBalanceCard totalTLM={totalTLM} totalWax={totalWax} totalStaked={totalStaked} TotalTLMYTD={TotalTLMYTD}
           TLMPrice={TLMPrice} WAXPrice={WAXPrice} />
           
         <div className="flex flex-col rounded-md items-center justify-center p-6 my-3 w-full lg:w-5/6 bg-gray-700">
@@ -161,6 +162,7 @@ export default function Home(props) {
           onTotalTLMChange={(newTotal) => { setTotalTLM(newTotal) }}
           onTotalWaxChange={(newTotal) => { setTotalWax(newTotal) }}
           onTotalStakedChange={(newTotal) => { setTotalStaked(newTotal) }}
+		  onTotalTLMYTDChange={(newTotal) => { setTotalTLMYTD(newTotal) }}
           />
         </div>
 		  <span className="text-center text-sm mt-2"> Copyright TLMMINER & AlienWolrds.FUN © 2021</span>
