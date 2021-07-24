@@ -416,7 +416,7 @@ export default function AccountRow(props) {
         let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T16:59:59.999Z`
         while(tries < 3) {
             console.log("TRY ",tries)
-            await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=300&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
+            await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=400&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
             .then((resp) => {
                 if(resp && resp.data) {
                     result = resp.data
@@ -488,7 +488,7 @@ export default function AccountRow(props) {
         const interval = setInterval(async () => {
             //console.log("It's time to checking!")
             setLoading(true)
-        }, 3600000);
+        }, 3600000*2);
         return () => clearInterval(interval);
     }, []);
 
