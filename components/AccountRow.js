@@ -410,8 +410,8 @@ export default function AccountRow(props) {
         let api_index = getRandom(0, tx_api_v2.length)
         let tries = 0
         let result = null
-        var yes = new Date((new Date()).valueOf() - 1000*60*60*24);
-        var to = new Date();
+        var yes = new Date((new Date()).valueOf() - 1000*60*60*48);
+        var to = new Date((new Date()).valueOf() - 1000*60*60*24);
         let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.getUTCDate()}T17:00:00.000Z`
         let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T16:59:59.999Z`
         while(tries < 3) {
