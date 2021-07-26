@@ -123,7 +123,7 @@ export default function AccountTable(props) {
         <div className="flex flex-col w-full overflow-auto text-center">
             <table className="table-auto border border-gray-500 border-collapse mt-5 text-center">
                 <thead>
-                    <tr className="bg-gray-800">
+                    <tr className="bg-gray-900">
                         <th>#</th>
                         <th>Wallet</th>
                         <th className="w-1/12">CPU</th>
