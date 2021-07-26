@@ -35,7 +35,7 @@ const TotalBalanceCard = (props) => {
 	
     <table className="table-auto border border-gray-800 border-collapse mt-5 text-center">
         <thead>
-            <tr className="bg-gray-800">
+            <tr className="bg-gray-900">
                 <th classname="mt-2" >            <label className="inline-flex items-center mt-3">
                 <input type="checkbox" className="form-checkbox h-4 w-4 text-gray-600"
                 defaultChecked={options.TLM}
@@ -63,14 +63,14 @@ const TotalBalanceCard = (props) => {
             </tr>
         </thead>
 
-        <tbody className="bg-gray-500">
+        <tbody className="bg-gray-700">
         <td><span className="text-lg mt-1  ">{totalTLM.toFixed(2)} TLM</span></td>
         <td><span className="text-lg mt-1  ">{totalWax.toFixed(2)} WAX</span></td>
         <td><span className="text-lg mt-1  ">{totalStaked.toFixed(2)} WAX</span></td>
 		<td><span className="text-lg mt-1  ">{TotalTLMYTD.toFixed(2)} TLM</span></td>
         <td><span className="text-lg mt-1  ">{totalUSDT.toFixed(2)} USDT</span></td>
         </tbody>
-        <tbody className="bg-gray-700">
+        <tbody className="bg-gray-800">
         <td><span className="text-xl  ">฿  {(totalTLM*TLMPrice.market_price).toFixed(0)*33} บาท</span></td>
         <td><span className="text-xl  ">฿  {(totalWax*WAXPrice.market_price).toFixed(0)*33} บาท</span></td>
         <td><span className="text-xl  ">฿  {(totalStaked*WAXPrice.market_price).toFixed(0)*33} บาท</span></td>
