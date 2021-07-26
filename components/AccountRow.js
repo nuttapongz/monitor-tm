@@ -209,11 +209,6 @@ export default function AccountRow(props) {
                 }
             })
         }
-        if(result.rows.length < 1) {
-            alert(`${user} is not alien worlds account, please check your spelling!`)
-            onDelete(acc)
-            return
-        }
         if(result) {
             console.log("Setting Tag data")
             console.log(result)
