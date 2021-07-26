@@ -132,7 +132,7 @@ export default function AccountTable(props) {
                         <th>WAX</th>
                         <th>Last mine</th>
 						<th>TLMYTD</th>
-                        <th className="w-min">Remove</th>
+                        <th>Remove</th>
                     </tr>
                 </thead>
                 <tbody>
