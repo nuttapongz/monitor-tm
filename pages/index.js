@@ -24,8 +24,9 @@ export default function Home(props) {
   const defaultAcc = props.urlAcc ? props.urlAcc : cookies.get("accounts") ? cookies.get("accounts") : []
   const [account, setAccount] = useState(defaultAcc)
   const [input, setInput] = useState("")
-  const genLink = props.urlAcc ? 'https://www.alienworlds.fun/?accounts='+btoa(JSON.stringify(props.urlAcc)) : cookies.get("accounts") ? 'https://www.alienworlds.fun/?accounts='+btoa(JSON.stringify(cookies.get("accounts"))) : "Please add some accounts first!"
+  const genLink = props.urlAcc ? 'http://monitor.tlmminer.com/?accounts='+btoa(JSON.stringify(props.urlAcc)) : cookies.get("accounts") ? 'http://monitor.tlmminer.com/?accounts='+btoa(JSON.stringify(cookies.get("accounts"))) : "Please add some accounts first!"
   const [link, setLink] = useState(genLink)
+  const [copied, setCopied] = useState(false)
   const [totalTLM, setTotalTLM] = useState(0)
   const [totalWax, setTotalWax] = useState(0)
   const [totalStaked, setTotalStaked] = useState(0)
@@ -98,7 +99,7 @@ export default function Home(props) {
     //console.log("Account Changed!")
     //console.log(account)
     cookies.set("accounts", account, cookieOptions)
-    setLink('https://www.alienworlds.fun/?accounts='+btoa(JSON.stringify(account)))
+    setLink('http://monitor.tlmminer.com/?accounts='+btoa(JSON.stringify(account)))
   }, [account])
 
   useEffect(async () => {
@@ -155,7 +156,14 @@ export default function Home(props) {
             </button>
               </div>
             </form>
-
+            {account.length > 0 && 
+              <div className="flex-1 flex-row text-center mt-2">
+                <div className="text-center mb-1"><span className="text-1xl text-red-300 mb-1">ลิงก์นี้ไว้เพื่อดูบัญชีเหล่านี้ในภายหลังหรือจากเครื่องอื่น</span></div>
+                <div><input type="text" className="shadow appearance-none w-4/6 rounded w-full py-2 px-3 bg-gray-300 mt-1 text-gray-800 font-bold leading-tight focus:outline-none focus:shadow-outline cursor-pointer"
+                value={link} onClick={(e) => {e.target.select();navigator.clipboard.writeText(link);setCopied(true)}} onFocus={(e) => {e.target.select();}} readOnly /></div>
+                {copied && <div><span className="font-bold text-sm mt-3">คัดลอก Link แล้ว !!</span></div>}
+              </div>
+            }
 
         </div>
           <AccountTable accounts={account}
@@ -166,7 +174,7 @@ export default function Home(props) {
 		  onTotalTLMYTDChange={(newTotal) => { setTotalTLMYTD(newTotal) }}
           />
         </div>
-<span className="text-2xl font-bold text-center text-red-400 mt-4">*** เปิดร่วมระหว่างบอทได้ ระบบจะดึงข้อมลูเฉพาะ Loading เท่านั้น !! ( ดึงข้อมลูใหม่ทุก 2 ชม. ) ***</span>
+<span className="text-2xl font-bold text-center text-red-500 mt-4">*** เปิดร่วมระหว่างบอทได้ ระบบจะดึงข้อมลูเฉพาะ Loading เท่านั้น !! ( ดึงข้อมลูใหม่ทุก 2 ชม. ) ***</span>
 		  <span className="text-center text-sm mt-2"> Copyright TLMMINER & AlienWolrds.FUN © 2021</span>
       </>}
     </div>
