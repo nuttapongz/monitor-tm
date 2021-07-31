@@ -37,7 +37,6 @@ const tx_api_v2 = [
     'https://api.waxsweden.org',
     'https://wax.eosphere.io',
     'https://wax.eu.eosamsterdam.net',
-'https://wax.blokcrafters.io'
 ]
 
 export default function AccountRow(props) {
@@ -444,9 +443,9 @@ export default function AccountRow(props) {
             //console.log("Checking... "+acc)
             await fetchAccountData(acc)
             await fetchTLM(acc)
-			await TLM_yesterday(acc)
             await delay(getRandom(100,1500))
             await getLastMineInfo(acc)
+	    await TLM_yesterday(acc)
             await checkNFT(acc)
             
             setLoading(false)
