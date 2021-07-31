@@ -20,7 +20,6 @@ const v1 = [
 ]
 const v2 = [
      'https://wax.cryptolions.io',
-    'https://api.waxsweden.org',
     'https://wax.eosphere.io'   
 ];
 
