@@ -20,7 +20,6 @@ const v1 = [
 ]
 const v2 = [
      'https://wax.cryptolions.io',
-    'https://wax.blokcrafters.io',
     'https://api.waxsweden.org',
     'https://wax.eosphere.io'   
 ];
@@ -30,7 +29,7 @@ const tx_api = [
     'https://wax.cryptolions.io',
     'https://api.wax.alohaeos.com',
     'https://wax.blacklusion.io',
-    'https://waxapi.ledgerwise.io',
+    'https://waxapi.ledgerwise.io'
 ]
 
 const tx_api_v2 = [
@@ -38,7 +37,8 @@ const tx_api_v2 = [
     'https://wax.cryptolions.io',
     'https://api.waxsweden.org',
     'https://wax.eosphere.io',
-    'https://wax.eu.eosamsterdam.net'
+    'https://wax.eu.eosamsterdam.net',
+'https://wax.blokcrafters.io'
 ]
 
 export default function AccountRow(props) {
