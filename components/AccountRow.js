@@ -32,11 +32,9 @@ const tx_api = [
 ]
 
 const tx_api_v2 = [
-    'https://api.wax.alohaeos.com',
+    'https://wax.blokcrafters.io',
     'https://wax.cryptolions.io',
-    'https://api.waxsweden.org',
     'https://wax.eosphere.io',
-    'https://wax.eu.eosamsterdam.net',
 ]
 
 export default function AccountRow(props) {
@@ -408,7 +406,7 @@ export default function AccountRow(props) {
         let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T16:59:59.999Z`
         while(tries < 3) {
             console.log("TRY ",tries)
-            await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=400&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
+            await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
             .then((resp) => {
                 if(resp && resp.data) {
                     result = resp.data
@@ -444,8 +442,8 @@ export default function AccountRow(props) {
             await fetchAccountData(acc)
             await fetchTLM(acc)
             await delay(getRandom(100,1500))
-            await getLastMineInfo(acc)
 	    await TLM_yesterday(acc)
+            await getLastMineInfo(acc)
             await checkNFT(acc)
             
             setLoading(false)
