@@ -404,6 +404,8 @@ export default function AccountRow(props) {
         var to = new Date((new Date()).valueOf() - 1000*60*60*24);
         let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.getUTCDate()}T17:00:00.000Z`
         let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T16:59:59.999Z`
+		console.log("today",today)
+		console.log("to",to)
         while(tries < 3) {
             console.log("TRY ",tries)
             await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
