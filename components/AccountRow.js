@@ -441,8 +441,8 @@ export default function AccountRow(props) {
         let tries = 0
         let result = null
 		var oldhours = new Date();
-		let hours = `${oldhours.getFullYear()}-${oldhours.toISOString().slice(5, 7)}-0${oldhours.getDate()}T${oldhours.getHours()-7}:00:00.000Z`
-		let oldhourss = `${oldhours.getFullYear()}-${oldhours.toISOString().slice(5, 7)}-0${oldhours.getDate()}T${oldhours.getHours()-8}:00:00.000Z`
+		let hours = `${oldhours.getFullYear()}-${oldhours.toISOString().slice(5, 7)}-0${oldhours.getDate()}T${oldhours.getHours()-8}:00:00.000Z`
+		let oldhourss = `${oldhours.getFullYear()}-${oldhours.toISOString().slice(5, 7)}-0${oldhours.getDate()}T${oldhours.getHours()-9}:00:00.000Z`
 		console.log("old",oldhourss)
 		console.log("old",hours)
         while(tries < 3) {
@@ -482,9 +482,9 @@ export default function AccountRow(props) {
             //console.log("Checking... "+acc)
             await fetchAccountData(acc)
             await fetchTLM(acc)
+	    await TLM_Hours(acc)		
             await delay(getRandom(100,1500))
-			await TLM_yesterday(acc)
-			await TLM_Hours(acc)
+	    await TLM_yesterday(acc)
             await getLastMineInfo(acc)
            // await checkNFT(acc)
             
