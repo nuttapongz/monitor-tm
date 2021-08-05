@@ -3,18 +3,20 @@ import { useState, useEffect } from 'react';
 import http from './Axios';
 
 export default function AccountTable(props) {
-    const { accounts, onDelete, onTotalTLMChange, onTotalWaxChange, onTotalStakedChange, onTotalTLMYTDChange } = props
+    const { accounts, onDelete, onTotalTLMChange, onTotalWaxChange, onTotalStakedChange, onTotalTLMYTDChange, onTotalTLMHRSChange } = props
 
     const initTLM = []
     const initWax = []
     const initStaked = []
 	const initTLMYTD = []
+	const initTLMHRS = []
     if(accounts.length > initTLM.length) {
         for (let acc of accounts) {
             initTLM.push(0)
             initWax.push(0)
             initStaked.push(0)
 			initTLMYTD.push(0)
+			initTLMHRS.push(0)
         }
     }
 
@@ -24,6 +26,7 @@ export default function AccountTable(props) {
     const [wax, setWax] = useState(initWax)
     const [staked, setStaked] = useState(initStaked)
 	const [TLMYTD, setTLMYTD] = useState(initTLMYTD)
+	const [TLMHRS, setTLMHRS] = useState(initTLMHRS)
 
     const onTLMChange = (i, amt) => {
         if(amt == 'Loading') return
@@ -37,15 +40,17 @@ export default function AccountTable(props) {
         const newWAX = [...wax]
         const newStaked = [...staked]
 		const newTLMYTD = [...TLMYTD]
+		const newTLMHRS = [...TLMHRS]
         newTLM.splice(i, 1)
         newWAX.splice(i, 1)
         newStaked.splice(i, 1)
 		newTLMYTD.splice(i, 1)
+		newTLMHRS.splice(i, 1)
         setTLM(newTLM)
         setWax(newWAX)
         setStaked(newStaked)
 		setTLMYTD(newTLMYTD)
-		
+		setTLMHRS(newTLMHRS)
         return onDelete(acc)
     }
 
@@ -107,6 +112,7 @@ export default function AccountTable(props) {
         setTLMYTD(newTLMYTD)
     }
 	
+	
 	    useEffect(() => {
         if(TLMYTD.length > 0) {
             const totalTLMYTD = TLMYTD.reduce((total,now) => {
@@ -116,6 +122,24 @@ export default function AccountTable(props) {
                 return total + parseFloat(now)
             }, 0)
             onTotalTLMYTDChange(totalTLMYTD)
+        }
+    }, [TLM])
+
+	const onTLMHRSChange = (i, amt) => {
+        const newTLMHRS = [...TLMHRS]
+        newTLMHRS[i] = amt
+        setTLMHRS(newTLMHRS)
+    }
+	
+	    useEffect(() => {
+        if(TLMHRS.length > 0) {
+            const totalTLMHRS = TLMHRS.reduce((total,now) => {
+                if(now == 'Loading') {
+                    return total
+                }
+                return total + parseFloat(now)
+            }, 0)
+            onTotalTLMHRSChange(totalTLMHRS)
         }
     }, [TLM])
 
@@ -132,6 +156,7 @@ export default function AccountTable(props) {
                         <th>WAX</th>
                         <th>Last mine</th>
 						<th>TLMYTD</th>
+						<th>TLMHRS</th>
                         <th>Remove</th>
                     </tr>
                 </thead>
@@ -143,7 +168,8 @@ export default function AccountTable(props) {
                             onTLMChange={(amt) => onTLMChange(i, amt)}
                             onWaxChange={(amt) => onWaxChange(i, amt)}
                             onStakedChange={(amt) => onStakedChange(i, amt)}
-							onTLMYTDChange={(amt) => onTLMYTDChange(i, amt)}	/>
+							onTLMYTDChange={(amt) => onTLMYTDChange(i, amt)}
+							onTLMHRSChange={(amt) => onTLMHRSChange(i, amt)}	/>
                         )
                     })}
                 </tbody>
