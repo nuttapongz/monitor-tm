@@ -402,8 +402,8 @@ export default function AccountRow(props) {
         let result = null
         var yes = new Date((new Date()).valueOf() - 1000*60*60*48);
         var to = new Date((new Date()).valueOf() - 1000*60*60*24);
-        let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.getUTCDate()}T17:00:00.000Z`
-        let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T16:59:59.999Z`
+        let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-0${yes.getUTCDate()}T17:00:00.000Z`
+        let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-0${to.getUTCDate()}T16:59:59.999Z`
 		console.log("today",today)
 		console.log("to",to)
         while(tries < 3) {
