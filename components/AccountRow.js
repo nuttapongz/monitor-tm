@@ -19,8 +19,9 @@ const v1 = [
     'https://api.waxeastern.cn'
 ]
 const v2 = [
-     'https://wax.cryptolions.io',
-    'https://wax.eosphere.io'   
+    'https://wax.blokcrafters.io',
+    'https://wax.cryptolions.io',
+    'https://wax.eosphere.io'  
 ];
 
 const tx_api = [
@@ -34,7 +35,7 @@ const tx_api = [
 const tx_api_v2 = [
     'https://wax.blokcrafters.io',
     'https://wax.cryptolions.io',
-    'https://wax.eosphere.io',
+    'https://wax.eosphere.io'
 ]
 
 export default function AccountRow(props) {
