@@ -81,7 +81,7 @@ const TotalBalanceCard = (props) => {
         <td><span className="text-lg mt-1  ">{totalStaked.toFixed(2)} WAX</span></td>
 		<td><span className="text-lg mt-1  ">{TotalTLMHRS.toFixed(2)} TLM</span></td>
 		<td><span className="text-lg mt-1  ">{TotalTLMYTD.toFixed(2)} TLM</span></td>
-		<td><span className="text-lg mt-1  ">{TotalTLMYTD.toFixed(2)*30} TLM</span></td>
+		<td><span className="text-lg mt-1  ">{TotalTLMYTD.toFixed(0)*30} TLM</span></td>
         <td><span className="text-lg mt-1  ">{totalUSDT.toFixed(2)} USDT</span></td>
         </tbody>
         <tbody className="bg-gray-800">
