@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react';
 import http from './Axios';
 
 export default function AccountTable(props) {
-    const { accounts, onDelete, onTotalTLMChange, onTotalWaxChange, onTotalStakedChange, onTotalTLMYTDChange, onTotalTLMHRSChange } = props
+    const { accounts, onDelete, onTotalTLMChange, onTotalWaxChange, onTotalStakedChange, onTotalTLMYTDChange, onTotalTLMHRSChange, onTotalTLMDAYChange  } = props
 
     const initTLM = []
     const initWax = []
     const initStaked = []
 	const initTLMYTD = []
 	const initTLMHRS = []
+    const initTLMDAY = []
     if(accounts.length > initTLM.length) {
         for (let acc of accounts) {
             initTLM.push(0)
@@ -17,6 +18,7 @@ export default function AccountTable(props) {
             initStaked.push(0)
 			initTLMYTD.push(0)
 			initTLMHRS.push(0)
+            initTLMDAY.push(0)
         }
     }
 
@@ -27,6 +29,7 @@ export default function AccountTable(props) {
     const [staked, setStaked] = useState(initStaked)
 	const [TLMYTD, setTLMYTD] = useState(initTLMYTD)
 	const [TLMHRS, setTLMHRS] = useState(initTLMHRS)
+    const [TLMDAY, setTLMDAY] = useState(initTLMDAY)
 
     const onTLMChange = (i, amt) => {
         if(amt == 'Loading') return
@@ -41,16 +44,19 @@ export default function AccountTable(props) {
         const newStaked = [...staked]
 		const newTLMYTD = [...TLMYTD]
 		const newTLMHRS = [...TLMHRS]
+        const newTLMDAY = [...TLMDAY]
         newTLM.splice(i, 1)
         newWAX.splice(i, 1)
         newStaked.splice(i, 1)
 		newTLMYTD.splice(i, 1)
 		newTLMHRS.splice(i, 1)
+        newTLMDAY.splice(i, 1)
         setTLM(newTLM)
         setWax(newWAX)
         setStaked(newStaked)
 		setTLMYTD(newTLMYTD)
 		setTLMHRS(newTLMHRS)
+        setTLMDAY(newTLMDAY)
         return onDelete(acc)
     }
 
@@ -143,6 +149,26 @@ export default function AccountTable(props) {
         }
     }, [TLM])
 
+
+    const onTLMDAYChange = (i, amt) => {
+        const newTLMDAY = [...TLMDAY]
+        newTLMDAY[i] = amt
+        setTLMDAY(newTLMDAY)
+    }
+	
+	    useEffect(() => {
+        if(TLMDAY.length > 0) {
+            const totalTLMDAY = TLMDAY.reduce((total,now) => {
+                if(now == 'Loading') {
+                    return total
+                }
+                return total + parseFloat(now)
+            }, 0)
+            onTotalTLMDAYChange(totalTLMDAY)
+        }
+    }, [TLM])
+
+
     return (
         <div className="flex flex-col w-full overflow-auto text-center">
             <table className="table-auto border border-gray-500 border-collapse mt-5 text-center">
@@ -155,8 +181,9 @@ export default function AccountTable(props) {
                         <th>TLM</th>
                         <th>WAX</th>
                         <th>Last mine</th>
-						<th>TLMYTD</th>
 						<th>TLMHRS</th>
+                        <th>TLMDAY</th>
+                        <th>TLMYTD</th>
                         <th>Remove</th>
                     </tr>
                 </thead>
@@ -169,7 +196,8 @@ export default function AccountTable(props) {
                             onWaxChange={(amt) => onWaxChange(i, amt)}
                             onStakedChange={(amt) => onStakedChange(i, amt)}
 							onTLMYTDChange={(amt) => onTLMYTDChange(i, amt)}
-							onTLMHRSChange={(amt) => onTLMHRSChange(i, amt)}	/>
+							onTLMHRSChange={(amt) => onTLMHRSChange(i, amt)}
+                            onTLMDAYChange={(amt) => onTLMDAYChange(i, amt)}	/>
                         )
                     })}
                 </tbody>

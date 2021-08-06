@@ -42,7 +42,7 @@ const tx_api_v2 = [
 ]
 
 export default function AccountRow(props) {
-    const { index, account, axios, onDelete, onTLMChange, onWaxChange, onStakedChange, onTLMYTDChange, onTLMHRSChange } = props
+    const { index, account, axios, onDelete, onTLMChange, onWaxChange, onStakedChange, onTLMYTDChange, onTLMHRSChange, onTLMDAYChange  } = props
 
     const [acc, setAcc] = useState(account)
     const [loading, setLoading] = useState(true)
@@ -50,6 +50,7 @@ export default function AccountRow(props) {
     const [balance, setBalance] = useState("Loading")
     const [TLMYTD, setTLMYTD] = useState("Loading")
 	const [TLMHRS, setTLMHRS] = useState("Loading")
+    const [TLMDAY, setTLMDAY] = useState("Loading")
     const [wax, setWax] = useState("Loading")
     const isInitialTx = useRef(true)
     const [update, setUpdate] = useState("None")
@@ -439,38 +440,39 @@ export default function AccountRow(props) {
     }
 	
 	
-//	    const TLM_Hours = async (user) => {
-//        let api_index = getRandom(0, tx_api_v2.length)
-//        let tries = 0
-//        let result = null
-//		var oldhours = new Date();
-//		let hours = `${oldhours.getFullYear()}-${oldhours.toISOString().slice(5, 7)}-0${oldhours.getDate()}T${oldhours.getHours()-7}:00:00.000Z`
-//		let oldhourss = `${oldhours.getFullYear()}-${oldhours.toISOString().slice(5, 7)}-0${oldhours.getDate()}T${oldhours.getHours()-8}:00:00.000Z`
-//		console.log("old",oldhourss)
-//		console.log("old",hours)
-//        while(tries < 3) {
-//            console.log("TRY ",tries)
-//            await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=10&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${oldhourss}&before=${hours}`)
-//            .then((resp) => {
- //               if(resp && resp.data) {
-  //                  result = resp.data
- //                   let amount_hrs = 0
-  //                  for (let i = 0; i < result.actions.length; i++) {
- //                       amount_hrs += result.actions[i].act.data.amount;
-  //                  }
-  //                  console.log(amount_hrs.toFixed(4))
-  //                  setTLMHRS(amount_hrs.toFixed(4))
- //               }
- //           })
-  //          .catch((err) => {
- //               tries++
-  //              api_index++
- //           })
- //           if(result != null) {
-  //              break;
-  //          }
-  //      }
-  //  }
+	    const TLM_DAY = async (user) => {
+       let api_index = getRandom(0, tx_api_v2.length)
+       let tries = 0
+       let result = null
+       var yes = new Date((new Date()).valueOf() - 1000*60*60*24);
+       var to = new Date();
+       let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-0${yes.getUTCDate()}T17:00:00.000Z`
+       let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-0${to.getUTCDate()}T16:59:59.999Z`
+       console.log("today",today)
+       console.log("to",to)
+       while(tries < 10) {
+           console.log("TRY ",tries)
+           await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
+           .then((resp) => {
+               if(resp && resp.data) {
+                   result = resp.data
+                   let amount_hrs = 0
+                   for (let i = 0; i < result.actions.length; i++) {
+                       amount_hrs += result.actions[i].act.data.amount;
+                   }
+                   console.log(amount_hrs.toFixed(4))
+                   setTLMDAY(amount_hrs.toFixed(4))
+               }
+           })
+           .catch((err) => {
+               tries++
+               api_index++
+           })
+           if(result != null) {
+               break;
+           }
+       }
+   }
 
     useEffect(async () => {
         await getMinerName(acc)
@@ -485,8 +487,9 @@ export default function AccountRow(props) {
             //console.log("Checking... "+acc)
             await fetchAccountData(acc)
             await fetchTLM(acc)
-	    await TLM_yesterday(acc)
+            await TLM_DAY(acc)
             await delay(getRandom(100,1500))
+			await TLM_yesterday(acc)
 			//await TLM_Hours(acc)
             await getLastMineInfo(acc)
            // await checkNFT(acc)
@@ -512,6 +515,11 @@ export default function AccountRow(props) {
 			useEffect(() => {
         onTLMHRSChange(TLMHRS)
     }, [TLMHRS])
+	
+
+    useEffect(() => {
+        onTLMDAYChange(TLMDAY)
+    }, [TLMDAY])
 	
 	
 	
@@ -576,8 +584,9 @@ export default function AccountRow(props) {
                 </span> : ''}
                 {nft && nft.length > 0 && <span className="font-bold text-xs">{nft.length} NFTs Claimable!</span>} <br />
                 </td>
-                <td>{TLMYTD} TLM</td>
 				<td>{TLMHRS} TLM</td>
+                <td>{TLMDAY} TLM</td>
+                <td>{TLMYTD} TLM</td>
                 <td className="p-3">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 cursor-pointer mx-auto" viewBox="0 0 20 20" fill="#FF0000"
                     onClick={() => { onDelete(acc) }}>
