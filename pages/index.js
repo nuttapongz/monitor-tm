@@ -32,6 +32,7 @@ export default function Home(props) {
   const [totalStaked, setTotalStaked] = useState(0)
   const [TotalTLMYTD, setTotalTLMYTD] = useState(0)
   const [TotalTLMHRS, setTotalTLMHRS] = useState(0)
+  const [TotalTLMDAY, setTotalTLMDAY] = useState(0)
   const [TLMPrice, setTLMPrice] = useState({
     market_price: 0,
     update: "None"
@@ -122,7 +123,7 @@ export default function Home(props) {
       }
       setWAXPrice(newWaxPrice)
     }
-  }, [totalTLM, totalWax, totalStaked, TotalTLMYTD, TotalTLMHRS])
+  }, [totalTLM, totalWax, totalStaked, TotalTLMYTD, TotalTLMHRS, TotalTLMDAY])
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center mt-10 px-2 lg:px-0">
@@ -137,7 +138,7 @@ export default function Home(props) {
 		<span className="text-center text-1xl mt-2">สามารถเปิดค้างระหว่าง BOT ได้เลย ระบบจะดึงข้อมลูแค่ Loading และจะดึงข้อมลูใหม่ทุก 2 ชม. </span>
       {layout != 'Table' && <>
       
-        <TotalBalanceCard totalTLM={totalTLM} totalWax={totalWax} totalStaked={totalStaked} TotalTLMYTD={TotalTLMYTD} TotalTLMHRS={TotalTLMHRS}
+        <TotalBalanceCard totalTLM={totalTLM} totalWax={totalWax} totalStaked={totalStaked} TotalTLMYTD={TotalTLMYTD} TotalTLMHRS={TotalTLMHRS} TotalTLMDAY={TotalTLMDAY}
           TLMPrice={TLMPrice} WAXPrice={WAXPrice} />
           
         <div className="flex flex-col rounded-md items-center justify-center p-6 my-3 w-full lg:w-5/6 bg-gray-700">
@@ -174,6 +175,7 @@ export default function Home(props) {
           onTotalStakedChange={(newTotal) => { setTotalStaked(newTotal) }}
 		  onTotalTLMYTDChange={(newTotal) => { setTotalTLMYTD(newTotal) }}
 		  onTotalTLMHRSChange={(newTotal) => { setTotalTLMHRS(newTotal) }}
+      onTotalTLMDAYChange={(newTotal) => { setTotalTLMDAY(newTotal) }}
           />
         </div>
 <span className="text-2xl font-bold text-center text-red-500 mt-4">*** เปิดร่วมระหว่างบอทได้ ระบบจะดึงข้อมลูเฉพาะ Loading เท่านั้น !! ( ดึงข้อมลูใหม่ทุก 2 ชม. ) ***</span>
