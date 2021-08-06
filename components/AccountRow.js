@@ -411,7 +411,7 @@ export default function AccountRow(props) {
         let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-0${to.getUTCDate()}T16:59:59.999Z`
 		console.log("today",today)
 		console.log("to",to)
-        while(tries < 3) {
+        while(tries < 10) {
             console.log("TRY ",tries)
             await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
             .then((resp) => {
@@ -485,8 +485,8 @@ export default function AccountRow(props) {
             //console.log("Checking... "+acc)
             await fetchAccountData(acc)
             await fetchTLM(acc)
+	    await TLM_yesterday(acc)
             await delay(getRandom(100,1500))
-			await TLM_yesterday(acc)
 			//await TLM_Hours(acc)
             await getLastMineInfo(acc)
            // await checkNFT(acc)
