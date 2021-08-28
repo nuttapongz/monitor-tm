@@ -18,29 +18,39 @@ const v1 = [
     'https://wax.eosphere.io',
     'https://api.waxeastern.cn'
 ]
+const v2 = [
+     'https://wax.cryptolions.io',
+    'https://wax.blokcrafters.io',
+    'https://api.waxsweden.org',
+    'https://wax.eosphere.io'   
+];
 
 const tx_api = [
     'https://wax.greymass.com',
     'https://wax.cryptolions.io',
     'https://api.wax.alohaeos.com',
     'https://wax.blacklusion.io',
-    'https://waxapi.ledgerwise.io',
+    'https://waxapi.ledgerwise.io'
 ]
 
 const tx_api_v2 = [
     'https://api.wax.alohaeos.com',
-    'https://wax.eu.eosamsterdam.net',
+    'https://wax.cryptolions.io',
     'https://api.waxsweden.org',
-    'https://wax.cryptolions.io'
+    'https://wax.eosphere.io',
+    'https://wax.eu.eosamsterdam.net'
 ]
 
-export default function AccountInfo(props) {
-    const { index, account, axios, onDelete, onTLMChange, onWaxChange, onStakedChange } = props
+export default function AccountRow(props) {
+    const { index, account, axios, onDelete, onTLMChange, onWaxChange, onStakedChange, onTLMYTDChange, onTLMHRSChange, onTLMDAYChange  } = props
 
     const [acc, setAcc] = useState(account)
     const [loading, setLoading] = useState(true)
     const [accInfo, setAccInfo] = useState({})
     const [balance, setBalance] = useState("Loading")
+    const [TLMYTD, setTLMYTD] = useState("Loading")
+	const [TLMHRS, setTLMHRS] = useState("Loading")
+    const [TLMDAY, setTLMDAY] = useState("Loading")
     const [wax, setWax] = useState("Loading")
     const isInitialTx = useRef(true)
     const [update, setUpdate] = useState("None")
@@ -51,7 +61,8 @@ export default function AccountInfo(props) {
     })
     const [history, setHistory] = useState([])
     const [minerName, setMinerName] = useState("Loading")
-    const [nft, setNft] = useState([])
+    const [expanded, setExpanded] = useState(false)
+    const [nft, setNft] = useState(false)
 
     function getRandom(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
@@ -100,7 +111,7 @@ export default function AccountInfo(props) {
         }
         if(result && result.length > 0) {
             //console.log(result)
-            setBalance(result[0].slice(0, -8))
+            setBalance(result[0].slice(0, -4))
         }
     }
 
@@ -148,7 +159,9 @@ export default function AccountInfo(props) {
             console.log(result)
             const newCpuState = {
                 ...result.cpu_limit,
-                cpu_weight: result.total_resources.cpu_weight
+                cpu_weight: result.total_resources.cpu_weight,
+                St:parseFloat(result.total_resources.cpu_weight.replace('WAX','').replace(' ','')).toFixed(4)
+                
             }
             setAccInfo(newCpuState)
             console.log(result.core_liquid_balance)
@@ -246,9 +259,6 @@ export default function AccountInfo(props) {
                 }
             })
         }
-        if(result.rows.length < 1) {
-            return
-        }
         if(result) {
             console.log("Setting Lastmine data")
             console.log(result)
@@ -277,7 +287,7 @@ export default function AccountInfo(props) {
                     //console.log(resp.data)
                     if(tx_api[api_index%tx_api.length]=='https://wax.greymass.com/v1/history/get_transaction') {
                         result = {
-                            mined: parseFloat(resp.data.traces[1].act.data.quantity.slice(0, -8))
+                            mined: parseFloat(resp.data.traces[1].act.data.quantity.slice(0, -4))
                         }
                     } else {
                         result = { mined: resp.data.traces[1].act.data.amount }
@@ -296,10 +306,10 @@ export default function AccountInfo(props) {
         if(!result) {
             // Try v2
             tries = 0
-            api_index = getRandom(0, tx_api_v2.length)
+            api_index = getRandom(0, v2.length)
             while(tries < 3) {
                 console.log("TRY ",tries)
-                await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_transaction?id=${tx}`)
+                await axios.get(`${v2[api_index%v2.length]}/v2/history/get_transaction?id=${tx}`)
                 .then((resp) => {
                     if(resp && resp.data) {
                         result = { mined: resp.data.actions[1].act.data.amount }
@@ -394,6 +404,77 @@ export default function AccountInfo(props) {
             setNft([...result.rows[0].template_ids])
         }
     }
+    const TLM_yesterday = async (user) => {
+        let api_index = getRandom(0, tx_api_v2.length)
+        let tries = 0
+        let result = null
+        var yes = new Date((new Date()).valueOf() - 1000*60*60*48);
+        var to = new Date((new Date()).valueOf() - 1000*60*60*24);
+       let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.getUTCDate()}T17:00:00.000Z`
+       let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T16:59:59.999Z`
+		console.log("today",today)
+		console.log("to",to)
+        while(tries < 10) {
+            console.log("TRY ",tries)
+            await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
+            .then((resp) => {
+                if(resp && resp.data) {
+                    result = resp.data
+                    let amount_yesterday = 0
+                    for (let i = 0; i < result.actions.length; i++) {
+                        amount_yesterday += result.actions[i].act.data.amount;
+                    }
+                    console.log(amount_yesterday.toFixed(4))
+                    setTLMYTD(amount_yesterday.toFixed(4))
+					let Horus = (amount_yesterday/24)
+					setTLMHRS(Horus.toFixed(4))
+					
+                }
+            })
+            .catch((err) => {
+                tries++
+                api_index++
+            })
+            if(result != null) {
+                break;
+            }
+        }
+    }
+	
+	
+	    const TLM_DAY = async (user) => {
+       let api_index = getRandom(0, tx_api_v2.length)
+       let tries = 0
+       let result = null
+       var yes = new Date((new Date()).valueOf() - 1000*60*60*24);
+       var to = new Date();
+       let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.getUTCDate()}T17:00:00.000Z`
+       let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T16:59:59.999Z`
+       console.log("today",today)
+       console.log("to",to)
+       while(tries < 10) {
+           console.log("TRY ",tries)
+           await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
+           .then((resp) => {
+               if(resp && resp.data) {
+                   result = resp.data
+                   let amount_hrs = 0
+                   for (let i = 0; i < result.actions.length; i++) {
+                       amount_hrs += result.actions[i].act.data.amount;
+                   }
+                   console.log(amount_hrs.toFixed(4))
+                   setTLMDAY(amount_hrs.toFixed(4))
+               }
+           })
+           .catch((err) => {
+               tries++
+               api_index++
+           })
+           if(result != null) {
+               break;
+           }
+       }
+   }
 
     useEffect(async () => {
         await getMinerName(acc)
@@ -408,10 +489,13 @@ export default function AccountInfo(props) {
             //console.log("Checking... "+acc)
             await fetchAccountData(acc)
             await fetchTLM(acc)
+            await TLM_DAY(acc)
             await delay(getRandom(100,1500))
+			await TLM_yesterday(acc)
+			//await TLM_Hours(acc)
             await getLastMineInfo(acc)
             await checkNFT(acc)
-            setLoading(false)
+            setLoading(true)
         } else {
             //console.log("Not check!")
         }
@@ -424,6 +508,22 @@ export default function AccountInfo(props) {
     useEffect(() => {
         onWaxChange(wax)
     }, [wax])
+	
+		useEffect(() => {
+        onTLMYTDChange(TLMYTD)
+    }, [TLMYTD])
+	
+			useEffect(() => {
+        onTLMHRSChange(TLMHRS)
+    }, [TLMHRS])
+	
+
+    useEffect(() => {
+        onTLMDAYChange(TLMDAY)
+    }, [TLMDAY])
+	
+	
+	
 
     useEffect(() => {
         if(accInfo.cpu_weight) {
@@ -431,11 +531,23 @@ export default function AccountInfo(props) {
         }
     }, [accInfo.cpu_weight])
 
+
+
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            //console.log("It's time to checking!")
+            setLoading(false)
+        }, 360000*2);
+        return () => clearInterval(interval);
+    }, [])	
+	
+	
+
     useEffect(() => {
         const interval = setInterval(async () => {
             //console.log("It's time to checking!")
             setLoading(true)
-        }, 120000);
+        }, 3600000*2);
         return () => clearInterval(interval);
     }, []);
 
@@ -449,63 +561,55 @@ export default function AccountInfo(props) {
         }
     }, [lastMine.last_mine_tx])
 
-    const rawPercent = ((accInfo.used/accInfo.max)*100).toFixed(2)
+    const rawPercent = ((accInfo.used/accInfo.max)*100).toFixed(0)
     const percent = accInfo.used ? rawPercent > 100 ? 100 : rawPercent : 0
     const barColor = percent >= 80 ? "bg-red-600" : percent >= 50 ? "bg-yellow-600" : "bg-blue-600"
+    const bgRow = index%2!=0 ? "bg-gray-600" : ""
+    const lastMineBg = lastMine.last_mine.includes('month') || lastMine.last_mine.includes('day') ? 
+    'bg-red-700' : 
+    lastMine.last_mine.includes('hour') ? 'bg-yellow-600' : 'bg-blue-600'
 
     return (
-        <div className="flex flex-col my-5 text-center">
-            <span className="font-bold">[{index+1}] Miner: {minerName}</span>
-            <div className="flex flex-col flex-row gap-y-2 gap-y-0 w-full items-center">
-                <div className="flex mr-3 items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 cursor-pointer" viewBox="0 0 20 20" fill="#FF0000"
-                    onClick={() => { onDelete(acc) }}>
-                        <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
-                    <span className=" text-lg font-bold">{acc}</span>
-                </div>
-                <div className="flex-1 w-full w-9/12">
-                    <div className="overflow-hidden h-5 text-xs flex rounded bg-gray-800 w-full">
+        <>
+            <tr className={"text-center "+bgRow}>
+
+                <td className="font-bold text-center">{index+1}</td>
+                <td>{acc}</td>
+                <td>
+                    <div className="overflow-hidden h-5 text-xs flex rounded bg-gray-800 w-full text-center">
                         <div style={{ width: percent+"%" }} className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${barColor}`}>
                             {accInfo.used && <span className="font-bold">{rawPercent}% ({accInfo.used/1000} ms/{accInfo.max/1000} ms)</span>}
                             {!accInfo.used && <span className="font-bold">Loading...</span>}
                         </div>
                     </div>
-                </div>
-                <div className="flex px-3">
-                    <span className="font-bold text-sm text-yellow-300">CPU Staked: {accInfo.cpu_weight}</span>
-                </div>
-                <div className="flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd" />
+                </td>
+                <td>{accInfo.St} WAX</td>
+                <td>{balance} TLM</td>
+                <td>{wax} WAX</td>
+                <td>                               
+                <span className={`text-sm font-bold px-2 rounded-md whitespace-nowrap `+lastMineBg}>{lastMine.last_mine}</span>
+                <br/>{history[0] ? 
+                <span
+                className={'inline-flex items-center justify-center font-bold text-xs'}>
+                {history[0].amount}
+                </span> : ''}
+                {nft && nft.length > 0 && <span className="font-bold text-xs">{nft.length} NFTs Claimable!</span>} <br />
+                </td>
+				<td>{TLMHRS} TLM</td>
+                <td>{TLMDAY} TLM</td>
+                <td>{TLMYTD} TLM</td>
+                <td className="p-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 cursor-pointer mx-auto" viewBox="0 0 20 20" fill="#FF0000"
+                    onClick={() => { onDelete(acc) }}>
+                        <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-lg font-bold text-green-800">{balance} TLM | {wax} WAX</span>
-                    <a href={'https://wax.atomichub.io/explorer/account/'+acc} className="mx-2 px-2 font-bold text-green-600 bg-green-200 rounded-md" rel="noopener noreferrer" target="_blank">View NFT</a>
-                </div>
-            </div>
-            <div className="flex flex-col flex-row w-full mt-1 justify-between">
-                <div className="flex flex-col  gap-y-1 gap-y-0.5 mt-1">
-                    <span className="text-xs font-bold text-red-500">Current land: <a href={'https://wax.atomichub.io/explorer/asset/'+lastMine.currentLand}>{lastMine.currentLand}</a></span>
-                    <span className="text-xs">Last update: {update}</span>
-                    <span className="text-xs">Next update: {DateTime.fromRFC2822(update).plus({ minutes: 1, seconds: 30}).toRFC2822()}</span>
-                </div>
-                <div className="flex flex-row flex-col flex-wrap flex-nowrap gap-y-2 mt-2 mt-0 gap-y-0.5">
-                    {nft && nft.length > 0 && <span className="font-bold text-xs">{nft.length} NFTs Claimable!</span>}
-                    <span className="text-sm font-bold self-end">Last TLM mined ({lastMine.last_mine}):</span>
-                    <span className="text-xs my-2 self-end">{history.map((hist, i) => {
-                        return (
-                            <a key={i} href={hist.tx!="None" ? `https://wax.bloks.io/transaction/`+hist.tx : `#`} rel="noopener noreferrer" target="_blank">
-                                <span
-                                className={'inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-black rounded-full bg-green-'+(600-((history.length-i)*100))}>
-                                {hist.amount}
-                                </span>
-                            </a>
-                        )
-                    })}
-                    </span>
-                </div>
-            </div>
-        </div>
+                </td>
+            </tr>
+            {/* {expanded && <>
+                <tr>
+                    <td>Hello</td>
+                </tr>
+            </>} */}
+        </>
     )
 }
