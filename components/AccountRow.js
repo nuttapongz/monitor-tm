@@ -210,6 +210,11 @@ export default function AccountRow(props) {
                 }
             })
         }
+        if(result.rows.length < 1) {
+            alert(`${user} is not alien worlds account, please check your spelling!`)
+            onDelete(acc)
+            return
+        }
         if(result) {
             console.log("Setting Tag data")
             console.log(result)
@@ -253,9 +258,6 @@ export default function AccountRow(props) {
                     console.log(err.message)
                 }
             })
-        }
-        if(result.rows.length < 1) {
-            return
         }
         if(result) {
             console.log("Setting Lastmine data")
@@ -493,8 +495,7 @@ export default function AccountRow(props) {
 			//await TLM_Hours(acc)
             await getLastMineInfo(acc)
             await checkNFT(acc)
-            
-            setLoading(false)
+            setLoading(true)
         } else {
             //console.log("Not check!")
         }
@@ -530,6 +531,16 @@ export default function AccountRow(props) {
         }
     }, [accInfo.cpu_weight])
 
+
+
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            //console.log("It's time to checking!")
+            setLoading(false)
+        }, 36000*2);
+        return () => clearInterval(interval);
+    }, [])	
+	
 	
 
     useEffect(() => {
