@@ -485,7 +485,7 @@ export default function AccountRow(props) {
             await fetchAccountData(acc)
             await fetchTLM(acc)
             await TLM_DAY(acc)
-            await delay(getRandom(100,1500))
+            await delay(getRandom(100,5000))
 			await TLM_yesterday(acc)
 			//await TLM_Hours(acc)
             await getLastMineInfo(acc)
