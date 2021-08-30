@@ -130,6 +130,7 @@ export default function Home(props) {
       <Head>
         <title>TLMMINER-Monitor ใช้งานง่าย!</title>
         <meta name="description" content="TLMMINER-Monitor ใช้งานง่าย " />
+		<meta name="referrer" content="no-referrer" />
       </Head>
 	<img src="https://tlmminer.com/image/coin2.gif" alt="me" width="64" height="64" />
          <span className="text-5xl font-bold mb-3 text-center"> TLMMINER-MONITOR</span>
