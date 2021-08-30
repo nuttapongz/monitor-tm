@@ -433,12 +433,11 @@ export default function AccountRow(props) {
             //console.log("Checking... "+acc)
             await fetchAccountData(acc)
             await fetchTLM(acc)
-	    await delay(getRandom(1000,1500))
-            await TLM_DAY(acc)
-            await delay(getRandom(1000,1500))
-	    await TLM_yesterday(acc)
-	     await getLastMineInfo(acc)
-		await TLM_Tools(acc)
+			await TLM_Tools(acc)
+			await TLM_DAY(acc)
+			await delay(getRandom(1000,1500))
+			await TLM_yesterday(acc)
+			await getLastMineInfo(acc)
 		//await TLM_Hours(acc)
             //await checkNFT(acc)
            setLoading(true)
@@ -478,12 +477,15 @@ export default function AccountRow(props) {
     }, [accInfo.cpu_weight])
 
     useEffect(() => {
-        const intervals = setIntervals(async () => {
+        const interval = setInterval(async () => {
             //console.log("It's time to checking!")
+			setLoading(true)
+			await delay(getRandom(1000,1500))
             setLoading(false)
-        }, 360000*2);
-        return () => clearIntervals(intervals);
+        }, 72000*2);
+        return () => clearInterval(interval);
     }, []);
+
 
     useEffect(() => {
         const interval = setInterval(async () => {
