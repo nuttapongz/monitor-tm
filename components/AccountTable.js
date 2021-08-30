@@ -181,6 +181,7 @@ export default function AccountTable(props) {
                         <th>TLM</th>
                         <th>WAX</th>
                         <th>Last mine</th>
+						<th>ID Land , Commission %</th>
 						<th>TLMHRS</th>
                         <th>TLMDAY</th>
                         <th>TLMYTD</th>
