@@ -20,6 +20,7 @@ const v1 = [
 ]
 const v2 = [
      'https://wax.cryptolions.io',
+    'https://wax.blokcrafters.io',
     'https://api.waxsweden.org',
     'https://wax.eosphere.io'   
 ];
@@ -29,12 +30,13 @@ const tx_api = [
     'https://wax.cryptolions.io',
     'https://api.wax.alohaeos.com',
     'https://wax.blacklusion.io',
-    'https://waxapi.ledgerwise.io'
+    'https://waxapi.ledgerwise.io',
 ]
 
 const tx_api_v2 = [
     'https://api.wax.alohaeos.com',
     'https://wax.cryptolions.io',
+    'https://wax.blokcrafters.io',
     'https://api.waxsweden.org',
     'https://wax.eosphere.io',
     'https://wax.eu.eosamsterdam.net'
@@ -350,7 +352,7 @@ export default function AccountRow(props) {
         }
     }
     const TLM_yesterday = async (user) => {
-        let api_index = getRandom(0, tx_api_v2.length)
+        let api_index = getRandom(0, v2.length)
         let tries = 0
         let result = null
         var yes = new Date((new Date()).valueOf() - 1000*60*60*48);
@@ -361,7 +363,7 @@ export default function AccountRow(props) {
 		console.log("to",to)
         while(tries < 10) {
             console.log("TRY ",tries)
-            await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
+            await axios.get(`${v2[api_index%v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
             .then((resp) => {
                 if(resp && resp.data) {
                     result = resp.data
@@ -388,7 +390,7 @@ export default function AccountRow(props) {
 	
 	
 	    const TLM_DAY = async (user) => {
-       let api_index = getRandom(0, tx_api_v2.length)
+       let api_index = getRandom(0, v2.length)
        let tries = 0
        let result = null
        var yes = new Date((new Date()).valueOf() - 1000*60*60*24);
@@ -399,7 +401,7 @@ export default function AccountRow(props) {
        console.log("to",to)
        while(tries < 10) {
            console.log("TRY ",tries)
-           await axios.get(`${tx_api_v2[api_index%tx_api_v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
+           await axios.get(`${v2[api_index%v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
            .then((resp) => {
                if(resp && resp.data) {
                    result = resp.data
