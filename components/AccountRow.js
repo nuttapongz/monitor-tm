@@ -481,7 +481,7 @@ export default function AccountRow(props) {
         const intervals = setInterval(async () => {
             //console.log("It's time to checking!")
 			setLoading(false)
-        }, 72000*2);
+        }, 360000*2);
         return () => clearInterval(intervals);
     }, [])	
 	
