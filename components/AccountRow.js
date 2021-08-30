@@ -51,6 +51,8 @@ export default function AccountRow(props) {
     const [TLMYTD, setTLMYTD] = useState("Loading")
 	const [TLMHRS, setTLMHRS] = useState("Loading")
     const [TLMDAY, setTLMDAY] = useState("Loading")
+	const [Land, setLand] = useState("Loading")
+	const [LandCom, setLandCom] = useState("x.xx")
     const [wax, setWax] = useState("Loading")
     const isInitialTx = useRef(true)
     const [update, setUpdate] = useState("None")
@@ -94,21 +96,6 @@ export default function AccountRow(props) {
                 break;
             }
         }
-        if(!result) {
-            await axios.get(`https://api.alienworlds.fun/get_tlm/${user}`)
-            .then((resp) => {
-                if(resp && resp.data) {
-                    result = resp.data
-                }
-            })
-            .catch((err) => {
-                if(err.response) {
-                    console.log(err.response)
-                } else {
-                    console.log(err.message)
-                }
-            })
-        }
         if(result && result.length > 0) {
             //console.log(result)
             setBalance(result[0].slice(0, -4))
@@ -139,21 +126,6 @@ export default function AccountRow(props) {
                 break;
             }
         }
-        if(!result) {
-            await axios.get(`https://api.alienworlds.fun/get_account/${user}`)
-            .then((resp) => {
-                if(resp && resp.data) {
-                    result = resp.data
-                }
-            })
-            .catch((err) => {
-                if(err.response) {
-                    console.log(err.response)
-                } else {
-                    console.log(err.message)
-                }
-            })
-        }
         if(result) {
             console.log("Setting data")
             console.log(result)
@@ -173,54 +145,6 @@ export default function AccountRow(props) {
         }
     }
 
-    const getMinerName = async (user) => {
-        let api_index = getRandom(0, v1.length)
-        let tries = 0
-        let result = null
-        while(tries < 3) {
-            console.log("TRY ",tries)
-            await axios.post(`${v1[api_index%v1.length]}/v1/chain/get_table_rows`,
-            {json: true, code: "federation", scope: "federation", table: 'players', lower_bound: user, upper_bound: user})
-            .then((resp) => {
-                if(resp && resp.data) {
-                    result = resp.data
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                tries++
-                api_index++
-            })
-            if(result != null) {
-                break;
-            }
-        }
-        if(!result) {
-            await axios.get(`https://api.alienworlds.fun/get_tag/${user}`)
-            .then((resp) => {
-                if(resp && resp.data) {
-                    result = resp.data
-                }
-            })
-            .catch((err) => {
-                if(err.response) {
-                    console.log(err.response)
-                } else {
-                    console.log(err.message)
-                }
-            })
-        }
-        if(result.rows.length < 1) {
-            alert(`${user} is not alien worlds account, please check your spelling!`)
-            onDelete(acc)
-            return
-        }
-        if(result) {
-            console.log("Setting Tag data")
-            console.log(result)
-            setMinerName(result.rows[0].tag)
-        }
-    }
 
     const getLastMineInfo = async (user) => {
         let api_index = getRandom(0, v1.length)
@@ -244,34 +168,28 @@ export default function AccountRow(props) {
                 break;
             }
         }
-        if(!result) {
-            await axios.get(`https://api.alienworlds.fun/get_lastmine/${user}`)
-            .then((resp) => {
-                if(resp && resp.data) {
-                    result = resp.data
-                }
-            })
-            .catch((err) => {
-                if(err.response) {
-                    console.log(err.response)
-                } else {
-                    console.log(err.message)
-                }
-            })
-        }
         if(result) {
             console.log("Setting Lastmine data")
             console.log(result)
             const lastMineString = result.rows[0].last_mine != "None" ? DateTime.fromISO(result.rows[0].last_mine+"Z").setZone("local").toRelative() : "Error"
+			const Land = result.rows[0].current_land
             const newLastMine = {
                 last_mine: lastMineString,
                 last_mine_tx: result.rows[0].last_mine_tx,
                 currentLand: result.rows[0].current_land
             }
+			setLand(Land)
             setLastMine(newLastMine)
+			const qq = await axios.get(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${Land}`)
+			const com = (qq.data.data.mutable_data.commission * 0.01).toFixed(2)
+			setLandCom(com)
         }
     }
     
+	
+	
+	
+	
     const fetchLastMineTx = async (tx) => {
         let api_index = getRandom(0, tx_api.length)
         let tries = 0
@@ -325,21 +243,6 @@ export default function AccountRow(props) {
                 }
             }
         }
-        if(!result) {
-            await axios.get(`https://api.alienworlds.fun/get_tx/${user}`)
-            .then((resp) => {
-                if(resp && resp.data) {
-                    result = resp.data
-                }
-            })
-            .catch((err) => {
-                if(err.response) {
-                    console.log(err.response)
-                } else {
-                    console.log(err.message)
-                }
-            })
-        }
         if(result && result.mined) {
             console.log("Setting TX data")
             console.log(result)
@@ -378,21 +281,6 @@ export default function AccountRow(props) {
             if(result != null) {
                 break;
             }
-        }
-        if(!result) {
-            await axios.get(`https://api.alienworlds.fun/check_nft/${user}`)
-            .then((resp) => {
-                if(resp && resp.data) {
-                    result = resp.data
-                }
-            })
-            .catch((err) => {
-                if(err.response) {
-                    console.log(err.response)
-                } else {
-                    console.log(err.message)
-                }
-            })
         }
         if(result.rows.length < 1) {
             setNft([])
@@ -476,10 +364,7 @@ export default function AccountRow(props) {
        }
    }
 
-    useEffect(async () => {
-        await getMinerName(acc)
-        await checkNFT(acc)
-    }, [acc])
+
 
     useEffect(async () => {
         //console.log("Loading... "+loading)
@@ -489,13 +374,13 @@ export default function AccountRow(props) {
             //console.log("Checking... "+acc)
             await fetchAccountData(acc)
             await fetchTLM(acc)
+			await getLastMineInfo(acc)
             await TLM_DAY(acc)
             await delay(getRandom(100,1500))
 			await TLM_yesterday(acc)
 			//await TLM_Hours(acc)
-            await getLastMineInfo(acc)
-            await checkNFT(acc)
-            setLoading(true)
+            //await checkNFT(acc)
+           setLoading(true)
         } else {
             //console.log("Not check!")
         }
@@ -534,13 +419,14 @@ export default function AccountRow(props) {
 
 
     useEffect(() => {
-        const interval = setInterval(async () => {
+        const intervals = setInterval(async () => {
             //console.log("It's time to checking!")
-            setLoading(false)
-        }, 36000*2);
-        return () => clearInterval(interval);
+            setLoading(true)
+			await delay(getRandom(1000,1500))
+			setLoading(false)
+        }, 72000*2);
+        return () => clearInterval(intervals);
     }, [])	
-	
 	
 
     useEffect(() => {
@@ -564,6 +450,7 @@ export default function AccountRow(props) {
     const rawPercent = ((accInfo.used/accInfo.max)*100).toFixed(0)
     const percent = accInfo.used ? rawPercent > 100 ? 100 : rawPercent : 0
     const barColor = percent >= 80 ? "bg-red-600" : percent >= 50 ? "bg-yellow-600" : "bg-blue-600"
+	const barColor1 = LandCom >= 25 ? "bg-red-600" : LandCom >= 5 ? "bg-yellow-600" : "bg-blue-600"
     const bgRow = index%2!=0 ? "bg-gray-600" : ""
     const lastMineBg = lastMine.last_mine.includes('month') || lastMine.last_mine.includes('day') ? 
     'bg-red-700' : 
@@ -595,6 +482,7 @@ export default function AccountRow(props) {
                 </span> : ''}
                 {nft && nft.length > 0 && <span className="font-bold text-xs">{nft.length} NFTs Claimable!</span>} <br />
                 </td>
+				<td> {Land}  <span className={`text-x font-bold px-2 rounded-md whitespace-nowrap `+barColor1}>{LandCom} % </span>  </td>
 				<td>{TLMHRS} TLM</td>
                 <td>{TLMDAY} TLM</td>
                 <td>{TLMYTD} TLM</td>
