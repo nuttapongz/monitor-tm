@@ -432,7 +432,7 @@ export default function AccountRow(props) {
             //console.log("Checking... "+acc)
             await fetchAccountData(acc)
             await fetchTLM(acc)
-			await getLastMineInfo(acc)
+	    await getLastMineInfo(acc)
             await TLM_DAY(acc)
             await delay(getRandom(100,1500))
 			await TLM_yesterday(acc)
@@ -483,7 +483,7 @@ export default function AccountRow(props) {
 			setLoading(true)
 			await delay(getRandom(100,1500))
 			setLoading(false)
-        }, 360000*2);
+        }, 120000*2);
         return () => clearInterval(intervals);
     }, [])	
 	
