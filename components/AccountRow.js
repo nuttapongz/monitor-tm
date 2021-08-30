@@ -431,14 +431,16 @@ export default function AccountRow(props) {
             //console.log("Checking... "+acc)
             await fetchAccountData(acc)
             await fetchTLM(acc)
-	    await getLastMineInfo(acc)
+	    await delay(getRandom(100,1500))
             await TLM_DAY(acc)
             await delay(getRandom(100,1500))
-			await TLM_yesterday(acc)
-			await TLM_Tools(acc)
+	    await TLM_yesterday(acc)
+	     await TLM_Tools(acc)
+	     await delay(getRandom(100,1500))
+	     await getLastMineInfo(acc)
 			//await TLM_Hours(acc)
             //await checkNFT(acc)
-           setLoading(true)
+           setLoading(false)
         } else {
             //console.log("Not check!")
         }
@@ -480,7 +482,7 @@ export default function AccountRow(props) {
         const intervals = setInterval(async () => {
             //console.log("It's time to checking!")
 			setLoading(false)
-        }, 120000*3);
+        }, 360000*2);
         return () => clearInterval(intervals);
     }, [])	
 	
