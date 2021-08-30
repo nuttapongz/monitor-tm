@@ -439,7 +439,7 @@ export default function AccountRow(props) {
 			await TLM_Tools(acc)
 			//await TLM_Hours(acc)
             //await checkNFT(acc)
-           setLoading(true)
+           setLoading(false)
         } else {
             //console.log("Not check!")
         }
@@ -480,6 +480,8 @@ export default function AccountRow(props) {
     useEffect(() => {
         const intervals = setInterval(async () => {
             //console.log("It's time to checking!")
+			setLoading(true)
+			await delay(getRandom(100,1500))
 			setLoading(false)
         }, 360000*2);
         return () => clearInterval(intervals);
