@@ -6,7 +6,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  zoom: 70%;
+  zoom: 100%;
   font-family: 'Kanit', sans-serif;
   @apply bg-gray-800 text-white
 }
@@ -20,6 +20,10 @@ a {
   box-sizing: border-box;
 }
 
-th, td {
+ td {
   @apply border border-gray-500 text-center p-2;
+}
+
+th{
+  @apply border border-gray-500 p-2;
 }
