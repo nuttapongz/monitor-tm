@@ -53,6 +53,9 @@ export default function AccountRow(props) {
     const [TLMDAY, setTLMDAY] = useState("Loading")
 	const [Land, setLand] = useState("Loading")
 	const [LandCom, setLandCom] = useState("x.xx")
+	const [Tools, setTools] = useState("https://tlmminer.com/image/none.png")
+	const [Tools1, setTools1] = useState("https://tlmminer.com/image/none.png")
+	const [Tools2, setTools2] = useState("https://tlmminer.com/image/none.png")
     const [wax, setWax] = useState("Loading")
     const isInitialTx = useRef(true)
     const [update, setUpdate] = useState("None")
@@ -259,6 +262,61 @@ export default function AccountRow(props) {
             }
         }
     }
+	
+	
+	    const TLM_Tools = async (user) => {
+        let api_index = getRandom(0, v1.length)
+        let tries = 0
+        let result = null
+        while(tries < 3) {
+            console.log("TRY ",tries)
+            await axios.post(`${v1[api_index%v1.length]}/v1/chain/get_table_rows`,
+            {json: true, code: "m.federation", scope: "m.federation", table: 'bags', lower_bound: user, upper_bound: user})
+            .then((resp) => {
+                if(resp && resp.data) {
+                    result = resp.data
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                tries++
+                api_index++
+            })
+            if(result != null) {
+                break;
+            }
+        }
+        if(result) {
+            let i = 0;
+               // let temptool = result.data
+				let itemtool = result
+                let idtool = itemtool.rows[0].items[0]
+				let idtool1 = itemtool.rows[0].items[1]
+				let idtool2 = itemtool.rows[0].items[2]
+				const qq = await axios.get(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${idtool}`)
+				const qq1 = await axios.get(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${idtool1}`)
+				const qq2 = await axios.get(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${idtool2}`)
+				let i1 = qq.data
+				let i2 = qq1.data
+				let i3 = qq2.data
+                let pictool = i1.data.data.img
+				let pictool1 = i2.data.data.img
+				let pictool2 = i3.data.data.img
+                console.log("PIC",pictool,"PIC1",pictool1,"PIIC2",pictool2);
+				const imageUrl = "https://alienworlds.mypinata.cloud/ipfs/" + pictool
+				const imageUrl1 = "https://alienworlds.mypinata.cloud/ipfs/" + pictool1
+				const imageUrl2 = "https://alienworlds.mypinata.cloud/ipfs/" + pictool2
+
+                //  document.getElementById("item_tool" + i).src = 'https://ipfs.io/ipfs/' + pictool;
+                
+				setTools(imageUrl)
+				setTools1(imageUrl1)
+				setTools2(imageUrl2)
+				i++;
+            }
+			
+        }
+    
 
     const checkNFT = async (user) => {
         let api_index = getRandom(0, v1.length)
@@ -378,6 +436,7 @@ export default function AccountRow(props) {
             await TLM_DAY(acc)
             await delay(getRandom(100,1500))
 			await TLM_yesterday(acc)
+			await TLM_Tools(acc)
 			//await TLM_Hours(acc)
             //await checkNFT(acc)
            setLoading(true)
@@ -421,8 +480,6 @@ export default function AccountRow(props) {
     useEffect(() => {
         const intervals = setInterval(async () => {
             //console.log("It's time to checking!")
-            setLoading(true)
-			await delay(getRandom(1000,1500))
 			setLoading(false)
         }, 72000*2);
         return () => clearInterval(intervals);
@@ -473,19 +530,23 @@ export default function AccountRow(props) {
                 <td>{accInfo.St} WAX</td>
                 <td>{balance} TLM</td>
                 <td>{wax} WAX</td>
-                <td>                               
-                <span className={`text-sm font-bold px-2 rounded-md whitespace-nowrap `+lastMineBg}>{lastMine.last_mine}</span>
-                <br/>{history[0] ? 
+                <td>  
+
+                <span className={`font-bold px-2 rounded-md whitespace-nowrap `+lastMineBg}>{lastMine.last_mine}</span>
+			 <br/>{history[0] ? 
                 <span
-                className={'inline-flex items-center justify-center font-bold text-xs'}>
+                className={'inline-flex items-center justify-center font-bold text-sm'}>
                 {history[0].amount}
-                </span> : ''}
+                </span> : ''}<br />	 <span className='bg-yellow-600 font-bold px-2 rounded-md whitespace-nowrap'>LAND & ค่าคอม %</span>	<br />
+				<span className='text-sm font-bold'>{Land} </span> <span className={`text-xs font-bold px-2 rounded-md whitespace-nowrap `+barColor1}>{LandCom} % </span> 
                 {nft && nft.length > 0 && <span className="font-bold text-xs">{nft.length} NFTs Claimable!</span>} <br />
                 </td>
-				<td> {Land}  <span className={`text-x font-bold px-2 rounded-md whitespace-nowrap `+barColor1}>{LandCom} % </span>  </td>
 				<td>{TLMHRS} TLM</td>
                 <td>{TLMDAY} TLM</td>
                 <td>{TLMYTD} TLM</td>
+				<th align="center" >
+			<td colspan="3"><img src={Tools} width="64" height="64"/></td><td colspan="3"><img src={Tools1}width="64" height="64"/></td><td colspan="3"><img src={Tools2}width="64" height="64"/></td>
+			</th>
                 <td className="p-3">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 cursor-pointer mx-auto" viewBox="0 0 20 20" fill="#FF0000"
                     onClick={() => { onDelete(acc) }}>

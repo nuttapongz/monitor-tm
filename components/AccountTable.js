@@ -180,14 +180,15 @@ export default function AccountTable(props) {
                         <th>Stake</th>
                         <th>TLM</th>
                         <th>WAX</th>
-                        <th>Last mine</th>
-						<th>ID Land , Commission %</th>
+                        <th>Mine & Land</th>
 						<th>TLMHRS</th>
                         <th>TLMDAY</th>
                         <th>TLMYTD</th>
-                        <th>Remove</th>
+                        <th>Mine Tools</th>
+						<th>#</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     {accounts.length > 0 && accounts.map((acc, i) => {
                     return (
@@ -202,6 +203,7 @@ export default function AccountTable(props) {
                         )
                     })}
                 </tbody>
+
             </table>
             {accounts.length === 0 && <span className="text-3xl font-bold text-center text-red-400 mt-4">ไม่พบข้อมลู ID WAX !!</span>}
         </div>
