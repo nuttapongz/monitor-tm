@@ -270,7 +270,8 @@ export default function AccountRow(props) {
         let tries = 0
         let result = null
         while(tries < 3) {
-            console.log("TRY ",tries)
+        console.log("TRY ",tries)
+	await delay(10000);
             await axios.post(`${v1[api_index%v1.length]}/v1/chain/get_table_rows`,
             {json: true, code: "m.federation", scope: "m.federation", table: 'bags', lower_bound: user, upper_bound: user})
             .then((resp) => {
@@ -400,6 +401,7 @@ export default function AccountRow(props) {
        console.log("today",today)
        console.log("to",to)
        while(tries < 10) {
+	    await delay(10000);
            console.log("TRY ",tries)
            await axios.get(`${v2[api_index%v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
            .then((resp) => {
@@ -431,16 +433,16 @@ export default function AccountRow(props) {
         setUpdate(DateTime.now().setZone("local").toRFC2822())
         if(loading) {
             //console.log("Checking... "+acc)
-            await fetchAccountData(acc)
-            await fetchTLM(acc)
+           		 await fetchAccountData(acc)
+            		await fetchTLM(acc)
 			await TLM_Tools(acc)
 			await TLM_DAY(acc)
-			await delay(getRandom(1000,1500))
+			await delay(10000);
 			await TLM_yesterday(acc)
 			await getLastMineInfo(acc)
 		//await TLM_Hours(acc)
             //await checkNFT(acc)
-           setLoading(true)
+           setLoading(false)
         } else {
             //console.log("Not check!")
         }
@@ -479,9 +481,9 @@ export default function AccountRow(props) {
     useEffect(() => {
         const interval = setInterval(async () => {
             //console.log("It's time to checking!")
-			setLoading(true)
-			await delay(getRandom(1000,1500))
-            setLoading(false)
+	setLoading(true)
+	await delay(1000)
+        setLoading(false)
         }, 72000*2);
         return () => clearInterval(interval);
     }, []);
