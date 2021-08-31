@@ -305,7 +305,6 @@ export default function AccountRow(props) {
                 let pictool = i1.data.data.img
 				let pictool1 = i2.data.data.img
 				let pictool2 = i3.data.data.img
-                console.log("PIC",pictool,"PIC1",pictool1,"PIIC2",pictool2);
 				const imageUrl = "https://alienworlds.mypinata.cloud/ipfs/" + pictool
 				const imageUrl1 = "https://alienworlds.mypinata.cloud/ipfs/" + pictool1
 				const imageUrl2 = "https://alienworlds.mypinata.cloud/ipfs/" + pictool2                
