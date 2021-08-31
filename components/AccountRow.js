@@ -363,6 +363,7 @@ export default function AccountRow(props) {
 		console.log("today",today)
 		console.log("to",to)
         while(tries < 10) {
+	    await delay(10000);
             console.log("TRY ",tries)
             await axios.get(`${v2[api_index%v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
             .then((resp) => {
