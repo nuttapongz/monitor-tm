@@ -289,7 +289,6 @@ export default function AccountRow(props) {
             }
         }
         if(result) {
-            let i = 0;
                // let temptool = result.data
 		await delay(getRandom(5000, 20000))
 				let itemtool = result
@@ -311,7 +310,6 @@ export default function AccountRow(props) {
 				setTools(imageUrl)
 				setTools1(imageUrl1)
 				setTools2(imageUrl2)
-				i++;
             }
 			
         }
