@@ -271,7 +271,7 @@ export default function AccountRow(props) {
         let result = null
         while(tries < 3) {
         console.log("TRY ",tries)
-	await delay(10000);
+	await delay(20000);
             await axios.post(`${v1[api_index%v1.length]}/v1/chain/get_table_rows`,
             {json: true, code: "m.federation", scope: "m.federation", table: 'bags', lower_bound: user, upper_bound: user})
             .then((resp) => {
@@ -363,7 +363,7 @@ export default function AccountRow(props) {
 		console.log("today",today)
 		console.log("to",to)
         while(tries < 10) {
-	    await delay(10000);
+	    await delay(20000);
             console.log("TRY ",tries)
             await axios.get(`${v2[api_index%v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
             .then((resp) => {
@@ -402,7 +402,7 @@ export default function AccountRow(props) {
        console.log("today",today)
        console.log("to",to)
        while(tries < 10) {
-	    await delay(10000);
+	    await delay(20000);
            console.log("TRY ",tries)
            await axios.get(`${v2[api_index%v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
            .then((resp) => {
@@ -438,12 +438,12 @@ export default function AccountRow(props) {
             		await fetchTLM(acc)
 			await TLM_Tools(acc)
 			await TLM_DAY(acc)
-			await delay(10000);
+			await delay(20000);
 			await TLM_yesterday(acc)
 			await getLastMineInfo(acc)
 		//await TLM_Hours(acc)
             //await checkNFT(acc)
-           setLoading(false)
+           setLoading(true)
         } else {
             //console.log("Not check!")
         }
@@ -477,7 +477,13 @@ export default function AccountRow(props) {
         }
     }, [accInfo.cpu_weight])
 
-
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            //console.log("It's time to checking!")
+            setLoading(false)
+        }, 360000*2);
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         const interval = setInterval(async () => {
