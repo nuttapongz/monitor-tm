@@ -470,8 +470,6 @@ export default function AccountRow(props) {
         onTLMDAYChange(TLMDAY)
     }, [TLMDAY])
 	
-	
-	
 
     useEffect(() => {
         if(accInfo.cpu_weight) {
@@ -479,15 +477,6 @@ export default function AccountRow(props) {
         }
     }, [accInfo.cpu_weight])
 
-    useEffect(() => {
-        const interval = setInterval(async () => {
-            //console.log("It's time to checking!")
-	setLoading(true)
-	await delay(1000)
-        setLoading(false)
-        }, 72000*2);
-        return () => clearInterval(interval);
-    }, []);
 
 
     useEffect(() => {
