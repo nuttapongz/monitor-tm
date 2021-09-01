@@ -290,7 +290,7 @@ export default function AccountRow(props) {
         }
         if(result) {
                // let temptool = result.data
-		await delay(getRandom(5000, 20000))
+		        await delay(getRandom(5000, 20000))
 				let itemtool = result
                 let idtool = itemtool.rows[0].items[0]
 				let idtool1 = itemtool.rows[0].items[1]
@@ -351,14 +351,13 @@ export default function AccountRow(props) {
         let api_index = getRandom(0, v2.length)
         let tries = 0
         let result = null
-        var yes = new Date((new Date()).valueOf() - 1000*60*60*48);
-        var to = new Date((new Date()).valueOf() - 1000*60*60*24);
-       let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.getUTCDate()}T17:00:00.000Z`
-       let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T16:59:59.999Z`
+        let yes = new Date((new Date()).valueOf() - 1000*60*60*48);
+        let to = new Date((new Date()).valueOf() - 1000*60*60*24);
+       let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.getUTCDate()}T00:00:00.000Z`
+       let today = `${to.getUTCFullYear()}-${to.toISOString().slice(5, 7)}-${to.getUTCDate()}T00:00:00.000Z`
 		console.log("today",today)
-		console.log("to",to)
+		console.log("yesterday",yesterday)
         while(tries < 10) {
-	    await delay(getRandom(5000, 20000))
             console.log("TRY ",tries)
             await axios.get(`${v2[api_index%v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
             .then((resp) => {
@@ -390,16 +389,13 @@ export default function AccountRow(props) {
        let api_index = getRandom(0, v2.length)
        let tries = 0
        let result = null
-       var yes = new Date((new Date()).valueOf() - 1000*60*60*24);
-       var to = new Date();
-       let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.getUTCDate()}T17:00:00.000Z`
-       let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T16:59:59.999Z`
-       console.log("today",today)
-       console.log("to",to)
+       let yes = new Date((new Date()).valueOf() - 1000*60*60*24);
+       let to = new Date();
+       let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.getUTCDate()}T00:00:00.000Z`
+       let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T00:00:00.000Z`
        while(tries < 10) {
-	    await delay(getRandom(5000, 20000))
            console.log("TRY ",tries)
-           await axios.get(`${v2[api_index%v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
+           await axios.get(`${v2[api_index%v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}`)
            .then((resp) => {
                if(resp && resp.data) {
                    result = resp.data
@@ -429,16 +425,17 @@ export default function AccountRow(props) {
         setUpdate(DateTime.now().setZone("local").toRFC2822())
         if(loading) {
             //console.log("Checking... "+acc)
-           		 await fetchAccountData(acc)
-            		await fetchTLM(acc)
-			await TLM_Tools(acc)
+            await fetchAccountData(acc)
+            await fetchTLM(acc)
 			await TLM_DAY(acc)
 			await delay(getRandom(5000, 20000))
 			await TLM_yesterday(acc)
 			await getLastMineInfo(acc)
+			await delay(getRandom(5000, 20000))
+			await TLM_Tools(acc)
 		//await TLM_Hours(acc)
             //await checkNFT(acc)
-           setLoading(true)
+           setLoading(false)
         } else {
             //console.log("Not check!")
         }
@@ -476,7 +473,7 @@ export default function AccountRow(props) {
         const interval = setInterval(async () => {
             //console.log("It's time to checking!")
             setLoading(true)
-        }, 360000*2);
+        }, 36000*2);
         return () => clearInterval(interval);
     }, []);
 
