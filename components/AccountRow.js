@@ -520,7 +520,7 @@ export default function AccountRow(props) {
                 <span
                 className={'inline-flex items-center justify-center font-bold text-sm'}>
                 {history[0].amount}
-                </span> : ''}<br />	 <span className='bg-yellow-600 font-bold px-2 rounded-md whitespace-nowrap'>LAND & ค่าคอม %</span>	<br />
+                </span> : ''}<br />	 
 				<span className='text-sm font-bold'>{Land} </span> <span className={`text-xs font-bold px-2 rounded-md whitespace-nowrap `+barColor1}>{LandCom} % </span> 
                 {nft && nft.length > 0 && <span className="font-bold text-xs">{nft.length} NFTs Claimable!</span>} <br />
                 </td>
