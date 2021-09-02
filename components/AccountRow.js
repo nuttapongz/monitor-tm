@@ -39,6 +39,7 @@ const tx_api_v2 = [
     'https://wax.blokcrafters.io',
     'https://api.waxsweden.org',
     'https://wax.eosphere.io',
+    'https://waxapi.ledgerwise.io',
     'https://wax.eu.eosamsterdam.net'
 ]
 
@@ -294,11 +295,12 @@ export default function AccountRow(props) {
         }
         if(result) {
                // let temptool = result.data
-		        await delay(getRandom(5000, 20000))
+		        await delay(getRandom(10000, 100000))
 				let itemtool = result
                 let idtool = itemtool.rows[0].items[0]
 				let idtool1 = itemtool.rows[0].items[1]
 				let idtool2 = itemtool.rows[0].items[2]
+				await delay(getRandom(10000, 100000))
 				const qq = await axios.get(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${idtool}`)
 				await delay(getRandom(10000, 100000))
 				const qq1 = await axios.get(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${idtool1}`)
