@@ -36,7 +36,6 @@ const tx_api = [
 const tx_api_v2 = [
     'https://api.wax.alohaeos.com',
     'https://wax.cryptolions.io',
-    'https://wax.blokcrafters.io',
     'https://api.waxsweden.org',
     'https://wax.eosphere.io',
     'https://wax.eu.eosamsterdam.net'
@@ -50,14 +49,18 @@ export default function AccountRow(props) {
     const [accInfo, setAccInfo] = useState({})
     const [balance, setBalance] = useState("Loading")
     const [TLMYTD, setTLMYTD] = useState("Loading")
+	const [CountYTD, setCountYTD] = useState("xx")
 	const [TLMHRS, setTLMHRS] = useState("Loading")
+	const [CountHRS, setCountHRS] = useState("xx")
     const [TLMDAY, setTLMDAY] = useState("Loading")
+	const [CountDAY, setCountDAY] = useState("xx")
 	const [Land, setLand] = useState("Loading")
 	const [LandCom, setLandCom] = useState("x.xx")
 	const [Tools, setTools] = useState("https://tlmminer.com/image/none.png")
 	const [Tools1, setTools1] = useState("https://tlmminer.com/image/none.png")
 	const [Tools2, setTools2] = useState("https://tlmminer.com/image/none.png")
     const [wax, setWax] = useState("Loading")
+	
     const isInitialTx = useRef(true)
     const [update, setUpdate] = useState("None")
     const [lastMine, setLastMine] = useState({
@@ -79,7 +82,7 @@ export default function AccountRow(props) {
         let tries = 0
         let result = null
         while(tries < 3) {
-            console.log("TRY ",tries)
+            //console.log("TRY ",tries)
             await axios.post(`${v1[api_index%v1.length]}/v1/chain/get_currency_balance`,
             {
                 "code": "alien.worlds",
@@ -92,7 +95,7 @@ export default function AccountRow(props) {
                 }
             })
             .catch((err) => {
-                console.log(err)
+                //console.log(err)
                 tries++
                 api_index++
             })
@@ -101,7 +104,7 @@ export default function AccountRow(props) {
             }
         }
         if(result && result.length > 0) {
-            //console.log(result)
+            ////console.log(result)
             setBalance(result[0].slice(0, -4))
         }
     }
@@ -111,7 +114,7 @@ export default function AccountRow(props) {
         let tries = 0
         let result = null
         while(tries < 3) {
-            console.log("TRY ",tries)
+            //console.log("TRY ",tries)
             await axios.post(`${v1[api_index%v1.length]}/v1/chain/get_account`,
             {
                 "account_name": user
@@ -122,7 +125,7 @@ export default function AccountRow(props) {
                 }
             })
             .catch((err) => {
-                console.log(err)
+                //console.log(err)
                 tries++
                 api_index++
             })
@@ -131,8 +134,8 @@ export default function AccountRow(props) {
             }
         }
         if(result) {
-            console.log("Setting data")
-            console.log(result)
+            //console.log("Setting data")
+            //console.log(result)
             const newCpuState = {
                 ...result.cpu_limit,
                 cpu_weight: result.total_resources.cpu_weight,
@@ -140,7 +143,7 @@ export default function AccountRow(props) {
                 
             }
             setAccInfo(newCpuState)
-            console.log(result.core_liquid_balance)
+            //console.log(result.core_liquid_balance)
             if(result.core_liquid_balance) {
                 setWax(result.core_liquid_balance.slice(0, -8))
             } else {
@@ -155,7 +158,7 @@ export default function AccountRow(props) {
         let tries = 0
         let result = null
         while(tries < 3) {
-            console.log("TRY ",tries)
+            //console.log("TRY ",tries)
             await axios.post(`${v1[api_index%v1.length]}/v1/chain/get_table_rows`,
             {json: true, code: "m.federation", scope: "m.federation", table: 'miners', lower_bound: user, upper_bound: user})
             .then((resp) => {
@@ -164,7 +167,7 @@ export default function AccountRow(props) {
                 }
             })
             .catch((err) => {
-                console.log(err)
+                //console.log(err)
                 tries++
                 api_index++
             })
@@ -173,8 +176,8 @@ export default function AccountRow(props) {
             }
         }
         if(result) {
-            console.log("Setting Lastmine data")
-            console.log(result)
+            //console.log("Setting Lastmine data")
+            //console.log(result)
             const lastMineString = result.rows[0].last_mine != "None" ? DateTime.fromISO(result.rows[0].last_mine+"Z").setZone("local").toRelative() : "Error"
 			const Land = result.rows[0].current_land
             const newLastMine = {
@@ -199,14 +202,14 @@ export default function AccountRow(props) {
         let tries = 0
         let result = null
         while(tries < 3) {
-            console.log("TRY ",tries)
+            //console.log("TRY ",tries)
             await axios.post(`${tx_api[api_index%tx_api.length]}/v1/history/get_transaction`,
             {
                 id: tx
             })
             .then((resp) => {
                 if(resp && resp.data) {
-                    //console.log(resp.data)
+                    ////console.log(resp.data)
                     if(tx_api[api_index%tx_api.length]=='https://wax.greymass.com/v1/history/get_transaction') {
                         result = {
                             mined: parseFloat(resp.data.traces[1].act.data.quantity.slice(0, -4))
@@ -217,7 +220,7 @@ export default function AccountRow(props) {
                 }
             })
             .catch((err) => {
-                console.log(err)
+                //console.log(err)
                 tries++
                 api_index++
             })
@@ -230,7 +233,7 @@ export default function AccountRow(props) {
             tries = 0
             api_index = getRandom(0, v2.length)
             while(tries < 3) {
-                console.log("TRY ",tries)
+                //console.log("TRY ",tries)
                 await axios.get(`${v2[api_index%v2.length]}/v2/history/get_transaction?id=${tx}`)
                 .then((resp) => {
                     if(resp && resp.data) {
@@ -238,7 +241,7 @@ export default function AccountRow(props) {
                     }
                 })
                 .catch((err) => {
-                    console.log(err)
+                    //console.log(err)
                     tries++
                     api_index++
                 })
@@ -248,8 +251,8 @@ export default function AccountRow(props) {
             }
         }
         if(result && result.mined) {
-            console.log("Setting TX data")
-            console.log(result)
+            //console.log("Setting TX data")
+            //console.log(result)
             const newHistory = [...history]
             if(newHistory.length == 5) {
                 newHistory.shift() //remove first member
@@ -270,7 +273,7 @@ export default function AccountRow(props) {
         let tries = 0
         let result = null
         while(tries < 3) {
-        console.log("TRY ",tries)
+        //console.log("TRY ",tries)
 	await delay(getRandom(5000, 20000))
             await axios.post(`${v1[api_index%v1.length]}/v1/chain/get_table_rows`,
             {json: true, code: "m.federation", scope: "m.federation", table: 'bags', lower_bound: user, upper_bound: user})
@@ -280,7 +283,7 @@ export default function AccountRow(props) {
                 }
             })
             .catch((err) => {
-                console.log(err)
+                //console.log(err)
                 tries++
                 api_index++
             })
@@ -296,7 +299,9 @@ export default function AccountRow(props) {
 				let idtool1 = itemtool.rows[0].items[1]
 				let idtool2 = itemtool.rows[0].items[2]
 				const qq = await axios.get(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${idtool}`)
+				await delay(getRandom(10000, 100000))
 				const qq1 = await axios.get(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${idtool1}`)
+				await delay(getRandom(10000, 100000))
 				const qq2 = await axios.get(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${idtool2}`)
 				let i1 = qq.data
 				let i2 = qq1.data
@@ -320,7 +325,7 @@ export default function AccountRow(props) {
         let tries = 0
         let result = null
         while(tries < 3) {
-            console.log("TRY ",tries)
+            //console.log("TRY ",tries)
             await axios.post(`${v1[api_index%v1.length]}/v1/chain/get_table_rows`,
             {json: true, code: "m.federation", scope: "m.federation", table: 'claims', lower_bound: user, upper_bound: user})
             .then((resp) => {
@@ -329,7 +334,7 @@ export default function AccountRow(props) {
                 }
             })
             .catch((err) => {
-                console.log(err)
+                //console.log(err)
                 tries++
                 api_index++
             })
@@ -342,8 +347,8 @@ export default function AccountRow(props) {
             return
         }
         if(result) {
-            console.log("Setting NFT data")
-            console.log(result)
+            //console.log("Setting NFT data")
+            //console.log(result)
             setNft([...result.rows[0].template_ids])
         }
     }
@@ -351,26 +356,31 @@ export default function AccountRow(props) {
         let api_index = getRandom(0, v2.length)
         let tries = 0
         let result = null
-        let yes = new Date((new Date()).valueOf() - 1000*60*60*48);
-        let to = new Date((new Date()).valueOf() - 1000*60*60*24);
-       let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-0${yes.getUTCDate()}T00:00:00.000Z`
-       let today = `${to.getUTCFullYear()}-${to.toISOString().slice(5, 7)}-0${to.getUTCDate()}T00:00:00.000Z`
-		console.log("today",today)
-		console.log("yesterday",yesterday)
+        let yes = new Date((new Date()).valueOf() - 1000*60*60*24);
+        let to = new Date((new Date()).valueOf() - 1000*60*60*0);
+       let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.toISOString().slice(8, 10)}T17:00:00.000Z`
+       let today = `${to.getUTCFullYear()}-${to.toISOString().slice(5, 7)}-${to.toISOString().slice(8, 10)}T16:59:59.999Z`
+		////console.log("today",yes)
+		////console.log("yesterday",to)
+		////console.log("tostr",to.toISOString().slice(8, 10))
         while(tries < 10) {
-            console.log("TRY ",tries)
-            await axios.get(`${v2[api_index%v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
+            ////console.log("TRY ",tries)
+            await axios.get(`${v2[api_index%v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=100&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}&before=${today}`)
             .then((resp) => {
                 if(resp && resp.data) {
                     result = resp.data
                     let amount_yesterday = 0
+					let count = result.total.value
                     for (let i = 0; i < result.actions.length; i++) {
                         amount_yesterday += result.actions[i].act.data.amount;
                     }
-                    console.log(amount_yesterday.toFixed(4))
+                    //console.log(amount_yesterday.toFixed(4))
                     setTLMYTD(amount_yesterday.toFixed(4))
 					let Horus = (amount_yesterday/24)
 					setTLMHRS(Horus.toFixed(4))
+					setCountYTD(count)
+					let countHrs = ((count/24).toFixed(0))
+					setCountHRS(countHrs)
 					
                 }
             })
@@ -389,22 +399,23 @@ export default function AccountRow(props) {
        let api_index = getRandom(0, v2.length)
        let tries = 0
        let result = null
-       let yes = new Date((new Date()).valueOf() - 1000*60*60*24);
-       let to = new Date();
-       let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-0${yes.getUTCDate()}T17:00:00.000Z`
-       let today = `${to.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${to.getUTCDate()}T00:00:00.000Z`
+       let yes = new Date((new Date()).valueOf() - 1000*60*60*0);
+	   //console.log("to24",to24,"to48",to48)
+       let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.toISOString().slice(8, 10)}T17:00:00.000Z`
        while(tries < 10) {
-           console.log("TRY ",tries)
-           await axios.get(`${v2[api_index%v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=250&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}`)
+           ////console.log("TRY ",tries)
+           await axios.get(`${v2[api_index%v2.length]}/v2/history/get_actions?account=${user}&skip=0&limit=100&sort=desc&transfer.to=${user}&transfer.from=m.federation&after=${yesterday}`)
            .then((resp) => {
                if(resp && resp.data) {
                    result = resp.data
                    let amount_hrs = 0
+				   let countday = result.total.value
                    for (let i = 0; i < result.actions.length; i++) {
                        amount_hrs += result.actions[i].act.data.amount;
                    }
-                   console.log(amount_hrs.toFixed(4))
+                   //console.log(amount_hrs.toFixed(4))
                    setTLMDAY(amount_hrs.toFixed(4))
+				   setCountDAY(countday)
                }
            })
            .catch((err) => {
@@ -420,11 +431,11 @@ export default function AccountRow(props) {
 
 
     useEffect(async () => {
-        //console.log("Loading... "+loading)
+        ////console.log("Loading... "+loading)
         await delay(getRandom(100, 5000))
         setUpdate(DateTime.now().setZone("local").toRFC2822())
         if(loading) {
-            //console.log("Checking... "+acc)
+            ////console.log("Checking... "+acc)
             	await fetchAccountData(acc)
             	await fetchTLM(acc)
 		await getLastMineInfo(acc)
@@ -432,12 +443,12 @@ export default function AccountRow(props) {
 		await delay(getRandom(5000, 20000))
 		await TLM_yesterday(acc)
 		await delay(getRandom(5000, 20000))
-		await TLM_Tools(acc)
+		//await TLM_Tools(acc)
 		//await TLM_Hours(acc)
             //await checkNFT(acc)
            setLoading(false)
         } else {
-            //console.log("Not check!")
+            ////console.log("Not check!")
         }
     }, [loading])
 
@@ -471,9 +482,9 @@ export default function AccountRow(props) {
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            //console.log("It's time to checking!")
+            ////console.log("It's time to checking!")
             setLoading(true)
-        }, 6000*5);
+        }, 6000*60);
         return () => clearInterval(interval);
     }, []);
 
@@ -481,7 +492,7 @@ export default function AccountRow(props) {
         if(isInitialTx.current) {
             isInitialTx.current = false
         } else {
-            //console.log("Last mine TX Changed!")
+            ////console.log("Last mine TX Changed!")
             if(lastMine.last_mine_tx == "Loading" || lastMine.last_mine_tx == "None") return
             await fetchLastMineTx(lastMine.last_mine_tx)
         }
@@ -524,9 +535,9 @@ export default function AccountRow(props) {
 				<span className='text-sm font-bold'>{Land} </span> <span className={`text-xs font-bold px-2 rounded-md whitespace-nowrap `+barColor1}>{LandCom} % </span> 
                 {nft && nft.length > 0 && <span className="font-bold text-xs">{nft.length} NFTs Claimable!</span>} <br />
                 </td>
-				<td>{TLMHRS} TLM</td>
-                <td>{TLMDAY} TLM</td>
-                <td>{TLMYTD} TLM</td>
+				<td>{TLMHRS} TLM <span className={'text-xs font-bold px-2 rounded-md whitespace-nowrap bg-blue-600'}>{CountHRS} ครั้ง </span></td>
+                <td>{TLMDAY} TLM <span className={'text-xs font-bold px-2 rounded-md whitespace-nowrap bg-blue-600'}>{CountDAY} ครั้ง </span></td>
+                <td>{TLMYTD} TLM <span className={'text-xs font-bold px-2 rounded-md whitespace-nowrap bg-blue-600'}>{CountYTD} ครั้ง </span></td>
 				<th align="center" >
 			<td colspan="3"><img src={Tools} width="64" height="64"/></td><td colspan="3"><img src={Tools1}width="64" height="64"/></td><td colspan="3"><img src={Tools2}width="64" height="64"/></td>
 			</th>

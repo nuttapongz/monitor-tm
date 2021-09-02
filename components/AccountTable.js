@@ -120,7 +120,7 @@ export default function AccountTable(props) {
 	
 	
 	    useEffect(() => {
-        if(TLMYTD.length > 0) {
+        if(TLMYTD.length > 3) {
             const totalTLMYTD = TLMYTD.reduce((total,now) => {
                 if(now == 'Loading') {
                     return total
@@ -138,7 +138,7 @@ export default function AccountTable(props) {
     }
 	
 	    useEffect(() => {
-        if(TLMHRS.length > 0) {
+        if(TLMHRS.length > 3) {
             const totalTLMHRS = TLMHRS.reduce((total,now) => {
                 if(now == 'Loading') {
                     return total
@@ -157,7 +157,7 @@ export default function AccountTable(props) {
     }
 	
 	    useEffect(() => {
-        if(TLMDAY.length > 0) {
+        if(TLMDAY.length > 3) {
             const totalTLMDAY = TLMDAY.reduce((total,now) => {
                 if(now == 'Loading') {
                     return total
@@ -193,13 +193,13 @@ export default function AccountTable(props) {
                     {accounts.length > 0 && accounts.map((acc, i) => {
                     return (
                             <AccountRow key={i} index={i} account={acc} axios={http}
-                            onDelete={() => onAccDelete(i, acc)}
                             onTLMChange={(amt) => onTLMChange(i, amt)}
                             onWaxChange={(amt) => onWaxChange(i, amt)}
                             onStakedChange={(amt) => onStakedChange(i, amt)}
 							onTLMYTDChange={(amt) => onTLMYTDChange(i, amt)}
 							onTLMHRSChange={(amt) => onTLMHRSChange(i, amt)}
-                            onTLMDAYChange={(amt) => onTLMDAYChange(i, amt)}	/>
+                            onTLMDAYChange={(amt) => onTLMDAYChange(i, amt)}
+							onDelete={() => onAccDelete(i, acc)}	/>
                         )
                     })}
                 </tbody>
