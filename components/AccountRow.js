@@ -353,7 +353,7 @@ export default function AccountRow(props) {
         let result = null
         let yes = new Date((new Date()).valueOf() - 1000*60*60*48);
         let to = new Date((new Date()).valueOf() - 1000*60*60*24);
-       let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.getUTCDate()}T00:00:00.000Z`
+       let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-0${yes.getUTCDate()}T00:00:00.000Z`
        let today = `${to.getUTCFullYear()}-${to.toISOString().slice(5, 7)}-0${to.getUTCDate()}T00:00:00.000Z`
 		console.log("today",today)
 		console.log("yesterday",yesterday)
@@ -473,7 +473,7 @@ export default function AccountRow(props) {
         const interval = setInterval(async () => {
             //console.log("It's time to checking!")
             setLoading(true)
-        }, 36000*2);
+        }, 6000*5);
         return () => clearInterval(interval);
     }, []);
 
