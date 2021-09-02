@@ -36,6 +36,7 @@ const tx_api = [
 const tx_api_v2 = [
     'https://api.wax.alohaeos.com',
     'https://wax.cryptolions.io',
+    'https://wax.blokcrafters.io',
     'https://api.waxsweden.org',
     'https://wax.eosphere.io',
     'https://wax.eu.eosamsterdam.net'
@@ -443,7 +444,7 @@ export default function AccountRow(props) {
 		await delay(getRandom(5000, 20000))
 		await TLM_yesterday(acc)
 		await delay(getRandom(5000, 20000))
-		//await TLM_Tools(acc)
+		await TLM_Tools(acc)
 		//await TLM_Hours(acc)
             //await checkNFT(acc)
            setLoading(false)
