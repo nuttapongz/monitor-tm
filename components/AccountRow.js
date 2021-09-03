@@ -359,8 +359,8 @@ export default function AccountRow(props) {
         let api_index = getRandom(0, v2.length)
         let tries = 0
         let result = null
-        let yes = new Date((new Date()).valueOf() - 1000*60*60*24);
-        let to = new Date((new Date()).valueOf() - 1000*60*60*0);
+        let yes = new Date((new Date()).valueOf() - 1000*60*60*48);
+        let to = new Date((new Date()).valueOf() - 1000*60*60*24);
        let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.toISOString().slice(8, 10)}T17:00:00.000Z`
        let today = `${to.getUTCFullYear()}-${to.toISOString().slice(5, 7)}-${to.toISOString().slice(8, 10)}T16:59:59.999Z`
 		////console.log("today",yes)
@@ -402,7 +402,7 @@ export default function AccountRow(props) {
        let api_index = getRandom(0, v2.length)
        let tries = 0
        let result = null
-       let yes = new Date((new Date()).valueOf() - 1000*60*60*0);
+       let yes = new Date((new Date()).valueOf() - 1000*60*60*24);
 	   //console.log("to24",to24,"to48",to48)
        let yesterday = `${yes.getUTCFullYear()}-${yes.toISOString().slice(5, 7)}-${yes.toISOString().slice(8, 10)}T17:00:00.000Z`
        while(tries < 10) {
