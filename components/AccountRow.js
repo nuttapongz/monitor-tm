@@ -58,6 +58,7 @@ export default function AccountRow(props) {
 	const [CountDAY, setCountDAY] = useState("xx")
 	const [Land, setLand] = useState("Loading")
 	const [LandCom, setLandCom] = useState("x.xx")
+    const [VIP, setVIP] = useState("x.xx")
 	const [Tools, setTools] = useState("https://tlmminer.com/image/none.png")
 	const [Tools1, setTools1] = useState("https://tlmminer.com/image/none.png")
 	const [Tools2, setTools2] = useState("https://tlmminer.com/image/none.png")
@@ -108,9 +109,19 @@ export default function AccountRow(props) {
         if(result && result.length > 0) {
             ////console.log(result)
             setBalance(result[0].slice(0, -4))
+	    const vipx = await axios.get(`https://mine.tlmminer.com/check-expire?wallet=${user}`)
+		let vip =  vipx.data
+		console.log("vip",vip)
+	    if(vip.indexOf("2022") || ("2021") || ("2023") )
+	     setVIP(`VIP ${vip}`)
         }
-    }
+        else {
+         let  novip = `NO VIP`
+            setVIP(novip)
 
+        }
+      }
+    
     const fetchAccountData = async (user) => {
         let api_index = getRandom(0, v1.length)
         let tries = 0
@@ -295,16 +306,16 @@ export default function AccountRow(props) {
         }
         if(result) {
                // let temptool = result.data
-		        await delay(getRandom(10000, 100000))
+		        await delay(getRandom(20000, 100000))
 				let itemtool = result
                 let idtool = itemtool.rows[0].items[0]
 				let idtool1 = itemtool.rows[0].items[1]
 				let idtool2 = itemtool.rows[0].items[2]
 				await delay(getRandom(10000, 100000))
 				const qq = await axios.get(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${idtool}`)
-				await delay(getRandom(10000, 100000))
+				await delay(getRandom(20000, 100000))
 				const qq1 = await axios.get(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${idtool1}`)
-				await delay(getRandom(10000, 100000))
+				await delay(getRandom(30000, 100000))
 				const qq2 = await axios.get(`https://wax.api.atomicassets.io/atomicassets/v1/assets/${idtool2}`)
 				let i1 = qq.data
 				let i2 = qq1.data
@@ -501,10 +512,11 @@ export default function AccountRow(props) {
         }
     }, [lastMine.last_mine_tx])
 
-    const rawPercent = ((accInfo.used/accInfo.max)*100).toFixed(0)
+     const rawPercent = ((accInfo.used/accInfo.max)*100).toFixed(0)
     const percent = accInfo.used ? rawPercent > 100 ? 100 : rawPercent : 0
     const barColor = percent >= 80 ? "bg-red-600" : percent >= 50 ? "bg-yellow-600" : "bg-blue-600"
 	const barColor1 = LandCom >= 25 ? "bg-red-600" : LandCom >= 5 ? "bg-yellow-600" : "bg-blue-600"
+	const barvip = VIP.indexOf("2022") || ("2021") || ("2023")  ? "bg-red-700" : VIP.indexOf("NO VIP") ? "bg-blue-600" : "bg-blue-600"
     const bgRow = index%2!=0 ? "bg-gray-600" : ""
     const lastMineBg = lastMine.last_mine.includes('month') || lastMine.last_mine.includes('day') ? 
     'bg-red-700' : 
@@ -515,7 +527,7 @@ export default function AccountRow(props) {
             <tr className={"text-center "+bgRow}>
 
                 <td className="font-bold text-center">{index+1}</td>
-                <td>{acc}</td>
+                <td><span className="text-xl font-bold"> {acc} </span> <br /> <span className={`text-xs font-bold px-2 rounded-md whitespace-nowrap `+barvip}>{VIP}</span> </td>
                 <td>
                     <div className="overflow-hidden h-5 text-xs flex rounded bg-gray-800 w-full text-center">
                         <div style={{ width: percent+"%" }} className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${barColor}`}>
