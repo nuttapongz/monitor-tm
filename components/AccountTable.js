@@ -120,9 +120,9 @@ export default function AccountTable(props) {
 	
 	
 	    useEffect(() => {
-        if(TLMYTD.length > 3) {
+        if(TLMYTD.length > 0) {
             const totalTLMYTD = TLMYTD.reduce((total,now) => {
-                if(now == 'Loading') {
+                if(now == 'Loading'|| now == 'Loading TLM') {
                     return total
                 }
                 return total + parseFloat(now)
@@ -138,9 +138,9 @@ export default function AccountTable(props) {
     }
 	
 	    useEffect(() => {
-        if(TLMHRS.length > 3) {
+        if(TLMHRS.length > 0) {
             const totalTLMHRS = TLMHRS.reduce((total,now) => {
-                if(now == 'Loading') {
+                if(now == 'Loading'|| now == 'Loading TLM') {
                     return total
                 }
                 return total + parseFloat(now)
@@ -157,9 +157,9 @@ export default function AccountTable(props) {
     }
 	
 	    useEffect(() => {
-        if(TLMDAY.length > 3) {
+        if(TLMDAY.length > 0) {
             const totalTLMDAY = TLMDAY.reduce((total,now) => {
-                if(now == 'Loading') {
+                if(now == 'Loading'|| now == 'Loading TLM') {
                     return total
                 }
                 return total + parseFloat(now)
