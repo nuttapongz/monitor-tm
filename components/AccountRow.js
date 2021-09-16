@@ -46,8 +46,10 @@ const tx_api_v2 = [
 
 var atomic_api = [
     'https://wax-atomic.wizardsguild.one', 
-    'https://api.wax-aa.bountyblok.io',
-    'https://aa.wax.blacklusion.io'
+  //  'https://api.wax-aa.bountyblok.io',
+   // 'https://aa.wax.blacklusion.io',
+	//'https://wax3.api.atomicassets.io',
+	'https://wax.api.atomicassets.io'
 ]
 
 export default function AccountRow(props) {
@@ -207,10 +209,11 @@ export default function AccountRow(props) {
             }
 			setLand(Land)
             setLastMine(newLastMine)
-			//let api_atom = getRandom(0, atomic_api.length)
-			//const qq = await axios.get(`${atomic_api[api_atom%atomic_api.length]}/atomicassets/v1/assets/${Land}`)
-			//const com = (qq.data.data.mutable_data.commission * 0.01).toFixed(2)
-			//setLandCom(com)
+			let api_atom = getRandom(0, atomic_api.length)
+			await delay(getRandom(20000, 100000))
+			const qq = await axios.get(`${atomic_api[api_atom%atomic_api.length]}/atomicassets/v1/assets/${Land}`)
+			const com = (qq.data.data.mutable_data.commission * 0.01).toFixed(2)
+			setLandCom(com)
         }
     }
     
@@ -312,33 +315,33 @@ export default function AccountRow(props) {
                 break;
             }
         }
-     //   if(result) {
-               // let temptool = result.data
-		 //       await delay(getRandom(20000, 100000))
-		//		let itemtool = result
-	//			let api_atom = getRandom(0, atomic_api.length)
-         //       let idtool = itemtool.rows[0].items[0]
-//				let idtool1 = itemtool.rows[0].items[1]
-//				let idtool2 = itemtool.rows[0].items[2]
-//				await delay(getRandom(10000, 100000))
-//				const qq = await axios.get(`${atomic_api[api_atom%atomic_api.length]}/atomicassets/v1/assets/${idtool}`)
-//				await delay(getRandom(20000, 100000))
-//				const qq1 = await axios.get(`${atomic_api[api_atom%atomic_api.length]}/atomicassets/v1/assets/${idtool1}`)
-//				await delay(getRandom(30000, 100000))
-//				const qq2 = await axios.get(`${atomic_api[api_atom%atomic_api.length]}/atomicassets/v1/assets/${idtool2}`)
-//				let i1 = qq.data
-//				let i2 = qq1.data
-//				let i3 = qq2.data
- //               let pictool = i1.data.data.img
-//				let pictool1 = i2.data.data.img
-//				let pictool2 = i3.data.data.img
-//				const imageUrl = "https://alienworlds.mypinata.cloud/ipfs/" + pictool
-//				const imageUrl1 = "https://alienworlds.mypinata.cloud/ipfs/" + pictool1
-//				const imageUrl2 = "https://alienworlds.mypinata.cloud/ipfs/" + pictool2                
-//				setTools(imageUrl)
-//				setTools1(imageUrl1)
-//				setTools2(imageUrl2)
-  //          }
+        if(result) {
+                let temptool = result.data
+		        await delay(getRandom(20000, 100000))
+				let itemtool = result
+				let api_atom = getRandom(0, atomic_api.length)
+                let idtool = itemtool.rows[0].items[0]
+				let idtool1 = itemtool.rows[0].items[1]
+				let idtool2 = itemtool.rows[0].items[2]
+				await delay(getRandom(10000, 100000))
+				const qq = await axios.get(`${atomic_api[api_atom%atomic_api.length]}/atomicassets/v1/assets/${idtool}`)
+				await delay(getRandom(20000, 100000))
+				const qq1 = await axios.get(`${atomic_api[api_atom%atomic_api.length]}/atomicassets/v1/assets/${idtool1}`)
+				await delay(getRandom(30000, 100000))
+				const qq2 = await axios.get(`${atomic_api[api_atom%atomic_api.length]}/atomicassets/v1/assets/${idtool2}`)
+				let i1 = qq.data
+				let i2 = qq1.data
+				let i3 = qq2.data
+               let pictool = i1.data.data.img
+				let pictool1 = i2.data.data.img
+				let pictool2 = i3.data.data.img
+				const imageUrl = "https://alienworlds.mypinata.cloud/ipfs/" + pictool
+				const imageUrl1 = "https://alienworlds.mypinata.cloud/ipfs/" + pictool1
+				const imageUrl2 = "https://alienworlds.mypinata.cloud/ipfs/" + pictool2                
+				setTools(imageUrl)
+				setTools1(imageUrl1)
+				setTools2(imageUrl2)
+          }
 			
         }
     
