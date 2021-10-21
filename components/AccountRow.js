@@ -211,8 +211,8 @@ export default function AccountRow(props) {
             setLastMine(newLastMine)
 			let api_atom = getRandom(0, atomic_api.length)
 			await delay(getRandom(20000, 100000))
-			const qq = await axios.get(`${atomic_api[api_atom%atomic_api.length]}/atomicassets/v1/assets/${Land}`)
-			const com = (qq.data.data.mutable_data.commission * 0.01).toFixed(2)
+			//const qq = await axios.get(`${atomic_api[api_atom%atomic_api.length]}/atomicassets/v1/assets/${Land}`)
+			//const com = (qq.data.data.mutable_data.commission * 0.01).toFixed(2)
 			setLandCom(com)
         }
     }
@@ -323,11 +323,11 @@ export default function AccountRow(props) {
                 let idtool = itemtool.rows[0].items[0]
 				let idtool1 = itemtool.rows[0].items[1]
 				let idtool2 = itemtool.rows[0].items[2]
-				await delay(getRandom(10000, 100000))
+				await delay(getRandom(50000, 100000))
 				const qq = await axios.get(`${atomic_api[api_atom%atomic_api.length]}/atomicassets/v1/assets/${idtool}`)
-				await delay(getRandom(20000, 100000))
+				await delay(getRandom(60000, 100000))
 				const qq1 = await axios.get(`${atomic_api[api_atom%atomic_api.length]}/atomicassets/v1/assets/${idtool1}`)
-				await delay(getRandom(30000, 100000))
+				await delay(getRandom(90000, 100000))
 				const qq2 = await axios.get(`${atomic_api[api_atom%atomic_api.length]}/atomicassets/v1/assets/${idtool2}`)
 				let i1 = qq.data
 				let i2 = qq1.data
